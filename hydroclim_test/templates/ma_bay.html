@@ -1,0 +1,28 @@
+<!Doctype html>
+<html>
+<head>
+    <title>Massachusetts Bay - TileCache - Test</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/lib/ol.css') }}" type="text/css">
+    <script src="{{ url_for('static', filename='js/lib/ol.js') }}" type="text/javascript" charset="utf-8"></script>
+    <style type="text/css">
+        #map {
+            width: 55%;
+            height: 55%;
+            border: 1px solid black;
+        }
+	    body {
+            padding: 0px;
+            margin: 2px
+        }
+    </style>
+</head>
+
+<body>
+
+<h2>Massachusetts Bay - TileCache - Test</h2>
+<div id="map">
+</div>
+<script src="{{ url_for('static', filename='js/forTest.js') }}" type="text/javascript" charset="utf-8"></script>
+
+</body>
+</html>
