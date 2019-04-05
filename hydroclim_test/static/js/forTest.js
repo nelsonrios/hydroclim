@@ -5,9 +5,9 @@ var maxExtent = [-180.0,-90.0,180.0,90.0]; //BBOX of EPSG:4326
 var tile =  new ol.layer.Tile({
             extent: maxExtent,
             source: new ol.source.TileWMS({
-                url: '/tilecache.cgi?',
+                url: '/tilecache?',
                 params: {
-                    'LAYERS': 'hydroclim_test:ma_bay_riv',
+                    'LAYERS': 'hydroclim:ma_ba_river',
                     'VERSION': '1.1.1',
                     'FORMAT': 'image/png',
                     'SRS':'EPSG:4326'
