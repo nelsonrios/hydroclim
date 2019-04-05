@@ -1,0 +1,69 @@
+\\poweredge\users\cody\documents\visual studio 2017\Projects\HydroClim_Lite\HydroClim\bin\roslyn\csc.exe
+\\poweredge\users\cody\documents\visual studio 2017\Projects\HydroClim_Lite\HydroClim\bin\roslyn\csc.exe.config
+\\poweredge\users\cody\documents\visual studio 2017\Projects\HydroClim_Lite\HydroClim\bin\roslyn\csc.rsp
+\\poweredge\users\cody\documents\visual studio 2017\Projects\HydroClim_Lite\HydroClim\bin\roslyn\csi.exe
+\\poweredge\users\cody\documents\visual studio 2017\Projects\HydroClim_Lite\HydroClim\bin\roslyn\csi.rsp
+\\poweredge\users\cody\documents\visual studio 2017\Projects\HydroClim_Lite\HydroClim\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+\\poweredge\users\cody\documents\visual studio 2017\Projects\HydroClim_Lite\HydroClim\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+\\poweredge\users\cody\documents\visual studio 2017\Projects\HydroClim_Lite\HydroClim\bin\roslyn\Microsoft.CodeAnalysis.CSharp.Scripting.dll
+\\poweredge\users\cody\documents\visual studio 2017\Projects\HydroClim_Lite\HydroClim\bin\roslyn\Microsoft.CodeAnalysis.dll
+\\poweredge\users\cody\documents\visual studio 2017\Projects\HydroClim_Lite\HydroClim\bin\roslyn\Microsoft.CodeAnalysis.Scripting.dll
+\\poweredge\users\cody\documents\visual studio 2017\Projects\HydroClim_Lite\HydroClim\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+\\poweredge\users\cody\documents\visual studio 2017\Projects\HydroClim_Lite\HydroClim\bin\roslyn\Microsoft.CSharp.Core.targets
+\\poweredge\users\cody\documents\visual studio 2017\Projects\HydroClim_Lite\HydroClim\bin\roslyn\Microsoft.DiaSymReader.Native.amd64.dll
+\\poweredge\users\cody\documents\visual studio 2017\Projects\HydroClim_Lite\HydroClim\bin\roslyn\Microsoft.DiaSymReader.Native.x86.dll
+\\poweredge\users\cody\documents\visual studio 2017\Projects\HydroClim_Lite\HydroClim\bin\roslyn\Microsoft.VisualBasic.Core.targets
+\\poweredge\users\cody\documents\visual studio 2017\Projects\HydroClim_Lite\HydroClim\bin\roslyn\System.AppContext.dll
+\\poweredge\users\cody\documents\visual studio 2017\Projects\HydroClim_Lite\HydroClim\bin\roslyn\System.Collections.Immutable.dll
+\\poweredge\users\cody\documents\visual studio 2017\Projects\HydroClim_Lite\HydroClim\bin\roslyn\System.Diagnostics.StackTrace.dll
+\\poweredge\users\cody\documents\visual studio 2017\Projects\HydroClim_Lite\HydroClim\bin\roslyn\System.IO.FileSystem.dll
+\\poweredge\users\cody\documents\visual studio 2017\Projects\HydroClim_Lite\HydroClim\bin\roslyn\System.IO.FileSystem.Primitives.dll
+\\poweredge\users\cody\documents\visual studio 2017\Projects\HydroClim_Lite\HydroClim\bin\roslyn\System.Reflection.Metadata.dll
+\\poweredge\users\cody\documents\visual studio 2017\Projects\HydroClim_Lite\HydroClim\bin\roslyn\vbc.exe
+\\poweredge\users\cody\documents\visual studio 2017\Projects\HydroClim_Lite\HydroClim\bin\roslyn\vbc.exe.config
+\\poweredge\users\cody\documents\visual studio 2017\Projects\HydroClim_Lite\HydroClim\bin\roslyn\vbc.rsp
+\\poweredge\users\cody\documents\visual studio 2017\Projects\HydroClim_Lite\HydroClim\bin\roslyn\VBCSCompiler.exe
+\\poweredge\users\cody\documents\visual studio 2017\Projects\HydroClim_Lite\HydroClim\bin\roslyn\VBCSCompiler.exe.config
+\\poweredge\users\cody\documents\visual studio 2017\Projects\HydroClim_Lite\HydroClim\bin\HydroClim.dll.config
+\\poweredge\users\cody\documents\visual studio 2017\Projects\HydroClim_Lite\HydroClim\bin\HydroClim.dll
+\\poweredge\users\cody\documents\visual studio 2017\Projects\HydroClim_Lite\HydroClim\bin\HydroClim.pdb
+\\poweredge\users\cody\documents\visual studio 2017\Projects\HydroClim_Lite\HydroClim\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+\\poweredge\users\cody\documents\visual studio 2017\Projects\HydroClim_Lite\HydroClim\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+\\poweredge\users\cody\documents\visual studio 2017\Projects\HydroClim_Lite\HydroClim\obj\Debug\HydroClim.csprojResolveAssemblyReference.cache
+\\poweredge\users\cody\documents\visual studio 2017\Projects\HydroClim_Lite\HydroClim\obj\Debug\HydroClim.dll
+\\poweredge\users\cody\documents\visual studio 2017\Projects\HydroClim_Lite\HydroClim\obj\Debug\HydroClim.pdb
+C:\Development\HydroClim_Lite\HydroClim\bin\roslyn\csc.exe
+C:\Development\HydroClim_Lite\HydroClim\bin\roslyn\csc.exe.config
+C:\Development\HydroClim_Lite\HydroClim\bin\roslyn\csc.rsp
+C:\Development\HydroClim_Lite\HydroClim\bin\roslyn\csi.exe
+C:\Development\HydroClim_Lite\HydroClim\bin\roslyn\csi.rsp
+C:\Development\HydroClim_Lite\HydroClim\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Development\HydroClim_Lite\HydroClim\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Development\HydroClim_Lite\HydroClim\bin\roslyn\Microsoft.CodeAnalysis.CSharp.Scripting.dll
+C:\Development\HydroClim_Lite\HydroClim\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Development\HydroClim_Lite\HydroClim\bin\roslyn\Microsoft.CodeAnalysis.Scripting.dll
+C:\Development\HydroClim_Lite\HydroClim\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Development\HydroClim_Lite\HydroClim\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Development\HydroClim_Lite\HydroClim\bin\roslyn\Microsoft.DiaSymReader.Native.amd64.dll
+C:\Development\HydroClim_Lite\HydroClim\bin\roslyn\Microsoft.DiaSymReader.Native.x86.dll
+C:\Development\HydroClim_Lite\HydroClim\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Development\HydroClim_Lite\HydroClim\bin\roslyn\System.AppContext.dll
+C:\Development\HydroClim_Lite\HydroClim\bin\roslyn\System.Collections.Immutable.dll
+C:\Development\HydroClim_Lite\HydroClim\bin\roslyn\System.Diagnostics.StackTrace.dll
+C:\Development\HydroClim_Lite\HydroClim\bin\roslyn\System.IO.FileSystem.dll
+C:\Development\HydroClim_Lite\HydroClim\bin\roslyn\System.IO.FileSystem.Primitives.dll
+C:\Development\HydroClim_Lite\HydroClim\bin\roslyn\System.Reflection.Metadata.dll
+C:\Development\HydroClim_Lite\HydroClim\bin\roslyn\vbc.exe
+C:\Development\HydroClim_Lite\HydroClim\bin\roslyn\vbc.exe.config
+C:\Development\HydroClim_Lite\HydroClim\bin\roslyn\vbc.rsp
+C:\Development\HydroClim_Lite\HydroClim\bin\roslyn\VBCSCompiler.exe
+C:\Development\HydroClim_Lite\HydroClim\bin\roslyn\VBCSCompiler.exe.config
+C:\Development\HydroClim_Lite\HydroClim\bin\HydroClim.dll.config
+C:\Development\HydroClim_Lite\HydroClim\bin\HydroClim.dll
+C:\Development\HydroClim_Lite\HydroClim\bin\HydroClim.pdb
+C:\Development\HydroClim_Lite\HydroClim\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Development\HydroClim_Lite\HydroClim\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Development\HydroClim_Lite\HydroClim\obj\Debug\HydroClim.csprojResolveAssemblyReference.cache
+C:\Development\HydroClim_Lite\HydroClim\obj\Debug\HydroClim.dll
+C:\Development\HydroClim_Lite\HydroClim\obj\Debug\HydroClim.pdb
+C:\Development\HydroClim_Lite\HydroClim\obj\Debug\HydroClim.csproj.CoreCompileInputs.cache

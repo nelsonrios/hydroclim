@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <_PublishTargetUrl>C:\Development\HydroClim_Lite\HydroClim\bin\Release\PublishOutput</_PublishTargetUrl>
+  </PropertyGroup>
+  <ItemGroup>
+    <File Include="About.html">
+      <publishTime>09/29/2017 11:11:06</publishTime>
+    </File>
+    <File Include="bin/HydroClim.dll">
+      <publishTime>10/04/2017 13:26:32</publishTime>
+    </File>
+    <File Include="bin/HydroClim.pdb">
+      <publishTime>10/04/2017 13:26:32</publishTime>
+    </File>
+    <File Include="bin/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll">
+      <publishTime>12/13/2016 04:10:32</publishTime>
+    </File>
+    <File Include="bin/roslyn/csc.exe">
+      <publishTime>06/27/2016 16:50:24</publishTime>
+    </File>
+    <File Include="bin/roslyn/csc.exe.config">
+      <publishTime>06/27/2016 16:50:24</publishTime>
+    </File>
+    <File Include="bin/roslyn/csc.rsp">
+      <publishTime>06/27/2016 16:50:24</publishTime>
+    </File>
+    <File Include="bin/roslyn/csi.exe">
+      <publishTime>06/27/2016 16:50:24</publishTime>
+    </File>
+    <File Include="bin/roslyn/csi.rsp">
+      <publishTime>06/27/2016 16:50:24</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.Build.Tasks.CodeAnalysis.dll">
+      <publishTime>06/27/2016 16:50:24</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.CodeAnalysis.CSharp.dll">
+      <publishTime>06/27/2016 16:50:24</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.CodeAnalysis.CSharp.Scripting.dll">
+      <publishTime>06/27/2016 16:50:24</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.CodeAnalysis.dll">
+      <publishTime>06/27/2016 16:50:24</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.CodeAnalysis.Scripting.dll">
+      <publishTime>06/27/2016 16:50:24</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.CodeAnalysis.VisualBasic.dll">
+      <publishTime>06/27/2016 16:50:24</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.CSharp.Core.targets">
+      <publishTime>06/27/2016 16:50:24</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.DiaSymReader.Native.amd64.dll">
+      <publishTime>06/27/2016 16:50:24</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.DiaSymReader.Native.x86.dll">
+      <publishTime>06/27/2016 16:50:24</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.VisualBasic.Core.targets">
+      <publishTime>06/27/2016 16:50:24</publishTime>
+    </File>
+    <File Include="bin/roslyn/System.AppContext.dll">
+      <publishTime>06/27/2016 16:50:24</publishTime>
+    </File>
+    <File Include="bin/roslyn/System.Collections.Immutable.dll">
+      <publishTime>06/27/2016 16:50:24</publishTime>
+    </File>
+    <File Include="bin/roslyn/System.Diagnostics.StackTrace.dll">
+      <publishTime>06/27/2016 16:50:24</publishTime>
+    </File>
+    <File Include="bin/roslyn/System.IO.FileSystem.dll">
+      <publishTime>06/27/2016 16:50:24</publishTime>
+    </File>
+    <File Include="bin/roslyn/System.IO.FileSystem.Primitives.dll">
+      <publishTime>06/27/2016 16:50:24</publishTime>
+    </File>
+    <File Include="bin/roslyn/System.Reflection.Metadata.dll">
+      <publishTime>06/27/2016 16:50:24</publishTime>
+    </File>
+    <File Include="bin/roslyn/vbc.exe">
+      <publishTime>06/27/2016 16:50:24</publishTime>
+    </File>
+    <File Include="bin/roslyn/vbc.exe.config">
+      <publishTime>06/27/2016 16:50:24</publishTime>
+    </File>
+    <File Include="bin/roslyn/vbc.rsp">
+      <publishTime>06/27/2016 16:50:24</publishTime>
+    </File>
+    <File Include="bin/roslyn/VBCSCompiler.exe">
+      <publishTime>06/27/2016 16:50:24</publishTime>
+    </File>
+    <File Include="bin/roslyn/VBCSCompiler.exe.config">
+      <publishTime>06/27/2016 16:50:24</publishTime>
+    </File>
+    <File Include="Contact.html">
+      <publishTime>10/05/2017 13:20:31</publishTime>
+    </File>
+    <File Include="css/site.css">
+      <publishTime>10/02/2017 11:43:32</publishTime>
+    </File>
+    <File Include="favicon.png">
+      <publishTime>07/18/2017 09:32:06</publishTime>
+    </File>
+    <File Include="Hydroclim.html">
+      <publishTime>10/04/2017 11:34:27</publishTime>
+    </File>
+    <File Include="img/10_50_flow.PNG">
+      <publishTime>09/15/2017 10:50:09</publishTime>
+    </File>
+    <File Include="img/10_50_temp.PNG">
+      <publishTime>09/15/2017 10:50:13</publishTime>
+    </File>
+    <File Include="img/august_1950.PNG">
+      <publishTime>09/29/2017 11:08:04</publishTime>
+    </File>
+    <File Include="img/banner1.svg">
+      <publishTime>07/17/2017 10:07:23</publishTime>
+    </File>
+    <File Include="img/banner2.svg">
+      <publishTime>07/17/2017 10:07:23</publishTime>
+    </File>
+    <File Include="img/banner3.svg">
+      <publishTime>07/17/2017 10:07:23</publishTime>
+    </File>
+    <File Include="img/banner4.svg">
+      <publishTime>07/17/2017 10:07:23</publishTime>
+    </File>
+    <File Include="img/bart.jpg">
+      <publishTime>07/10/2017 14:49:35</publishTime>
+    </File>
+    <File Include="img/cody.png">
+      <publishTime>07/28/2017 10:00:36</publishTime>
+    </File>
+    <File Include="img/color_image.svg">
+      <publishTime>07/17/2017 12:15:49</publishTime>
+    </File>
+    <File Include="img/color_logo.svg">
+      <publishTime>07/17/2017 10:16:18</publishTime>
+    </File>
+    <File Include="img/december_1950.PNG">
+      <publishTime>09/29/2017 11:09:22</publishTime>
+    </File>
+    <File Include="img/f2_logo.png">
+      <publishTime>09/11/2012 08:14:43</publishTime>
+    </File>
+    <File Include="img/ficklin.jpg">
+      <publishTime>07/31/2017 15:29:18</publishTime>
+    </File>
+    <File Include="img/final_logo_web.png">
+      <publishTime>09/28/2012 08:19:26</publishTime>
+    </File>
+    <File Include="img/knouft.png">
+      <publishTime>07/31/2017 15:22:27</publishTime>
+    </File>
+    <File Include="img/Male_silhouette.png">
+      <publishTime>07/28/2017 12:18:31</publishTime>
+    </File>
+    <File Include="img/Nima.jpg">
+      <publishTime>10/04/2017 13:13:23</publishTime>
+    </File>
+    <File Include="img/nrios1.jpg">
+      <publishTime>07/10/2017 14:49:36</publishTime>
+    </File>
+    <File Include="img/nsf1v.jpg">
+      <publishTime>07/28/2017 09:50:45</publishTime>
+    </File>
+    <File Include="img/primary_mark.jpg">
+      <publishTime>07/28/2017 11:22:40</publishTime>
+    </File>
+    <File Include="img/ram-neupane2_orig.png">
+      <publishTime>07/31/2017 15:17:41</publishTime>
+    </File>
+    <File Include="img/resources-trident.jpg">
+      <publishTime>07/28/2017 09:45:24</publishTime>
+    </File>
+    <File Include="img/webtu2c.jpg">
+      <publishTime>07/10/2017 14:49:36</publishTime>
+    </File>
+    <File Include="img/white_image.svg">
+      <publishTime>07/17/2017 11:12:14</publishTime>
+    </File>
+    <File Include="img/white_logo.svg">
+      <publishTime>07/17/2017 11:13:14</publishTime>
+    </File>
+    <File Include="img/wordmark-Green.gif">
+      <publishTime>07/28/2017 09:42:21</publishTime>
+    </File>
+    <File Include="index.html">
+      <publishTime>09/15/2017 13:07:11</publishTime>
+    </File>
+    <File Include="js/leafletMap.js">
+      <publishTime>10/04/2017 13:07:24</publishTime>
+    </File>
+    <File Include="leafletMap.js">
+      <publishTime>09/20/2017 09:38:23</publishTime>
+    </File>
+    <File Include="lib/bootstrap/css/bootstrap-theme.css">
+      <publishTime>09/15/2017 11:45:14</publishTime>
+    </File>
+    <File Include="lib/bootstrap/css/bootstrap-theme.css.map">
+      <publishTime>09/15/2017 11:45:14</publishTime>
+    </File>
+    <File Include="lib/bootstrap/css/bootstrap-theme.min.css">
+      <publishTime>09/15/2017 11:45:14</publishTime>
+    </File>
+    <File Include="lib/bootstrap/css/bootstrap-theme.min.css.map">
+      <publishTime>09/15/2017 11:45:14</publishTime>
+    </File>
+    <File Include="lib/bootstrap/css/bootstrap.css">
+      <publishTime>09/15/2017 11:45:14</publishTime>
+    </File>
+    <File Include="lib/bootstrap/css/bootstrap.css.map">
+      <publishTime>09/15/2017 11:45:15</publishTime>
+    </File>
+    <File Include="lib/bootstrap/css/bootstrap.min.css">
+      <publishTime>09/15/2017 11:45:15</publishTime>
+    </File>
+    <File Include="lib/bootstrap/css/bootstrap.min.css.map">
+      <publishTime>09/15/2017 11:45:15</publishTime>
+    </File>
+    <File Include="lib/bootstrap/fonts/glyphicons-halflings-regular.eot">
+      <publishTime>09/15/2017 11:45:14</publishTime>
+    </File>
+    <File Include="lib/bootstrap/fonts/glyphicons-halflings-regular.svg">
+      <publishTime>09/15/2017 11:45:14</publishTime>
+    </File>
+    <File Include="lib/bootstrap/fonts/glyphicons-halflings-regular.ttf">
+      <publishTime>09/15/2017 11:45:14</publishTime>
+    </File>
+    <File Include="lib/bootstrap/fonts/glyphicons-halflings-regular.woff">
+      <publishTime>09/15/2017 11:45:14</publishTime>
+    </File>
+    <File Include="lib/bootstrap/fonts/glyphicons-halflings-regular.woff2">
+      <publishTime>09/15/2017 11:45:14</publishTime>
+    </File>
+    <File Include="lib/bootstrap/js/bootstrap.js">
+      <publishTime>09/15/2017 11:45:14</publishTime>
+    </File>
+    <File Include="lib/bootstrap/js/bootstrap.min.js">
+      <publishTime>09/15/2017 11:45:14</publishTime>
+    </File>
+    <File Include="lib/bootstrap/js/npm.js">
+      <publishTime>09/15/2017 11:45:14</publishTime>
+    </File>
+    <File Include="lib/esri-leaflet.js">
+      <publishTime>09/15/2017 12:47:45</publishTime>
+    </File>
+    <File Include="lib/fullscreen%402x.png">
+      <publishTime>10/02/2017 09:13:53</publishTime>
+    </File>
+    <File Include="lib/fullscreen.png">
+      <publishTime>09/15/2017 13:11:01</publishTime>
+    </File>
+    <File Include="lib/jquery-3.2.1.min.js">
+      <publishTime>09/15/2017 11:21:26</publishTime>
+    </File>
+    <File Include="lib/L.Control.MousePosition.css">
+      <publishTime>09/11/2017 15:17:15</publishTime>
+    </File>
+    <File Include="lib/L.Control.MousePosition.js">
+      <publishTime>09/11/2017 15:17:15</publishTime>
+    </File>
+    <File Include="lib/L.Control.ZoomDisplay.css">
+      <publishTime>05/12/2016 12:46:40</publishTime>
+    </File>
+    <File Include="lib/L.Control.ZoomDisplay.js">
+      <publishTime>05/12/2016 12:46:40</publishTime>
+    </File>
+    <File Include="lib/leaflet-tilelayer-wmts.js">
+      <publishTime>09/08/2017 10:11:08</publishTime>
+    </File>
+    <File Include="lib/leaflet.fullscreen.css">
+      <publishTime>09/15/2017 12:26:03</publishTime>
+    </File>
+    <File Include="lib/Leaflet.fullscreen.min.js">
+      <publishTime>09/15/2017 12:23:34</publishTime>
+    </File>
+    <File Include="lib/Leaflet.GoogleMutant.js">
+      <publishTime>09/15/2017 12:51:51</publishTime>
+    </File>
+    <File Include="lib/leaflet/images/layers-2x.png">
+      <publishTime>08/08/2017 08:50:28</publishTime>
+    </File>
+    <File Include="lib/leaflet/images/layers.png">
+      <publishTime>08/08/2017 08:50:28</publishTime>
+    </File>
+    <File Include="lib/leaflet/images/marker-icon-2x.png">
+      <publishTime>08/08/2017 08:50:28</publishTime>
+    </File>
+    <File Include="lib/leaflet/images/marker-icon.png">
+      <publishTime>08/08/2017 08:50:28</publishTime>
+    </File>
+    <File Include="lib/leaflet/images/marker-shadow.png">
+      <publishTime>08/08/2017 08:50:28</publishTime>
+    </File>
+    <File Include="lib/leaflet/leaflet-src.js">
+      <publishTime>09/27/2017 14:24:02</publishTime>
+    </File>
+    <File Include="lib/leaflet/leaflet-src.js.map">
+      <publishTime>08/08/2017 08:51:33</publishTime>
+    </File>
+    <File Include="lib/leaflet/leaflet.css">
+      <publishTime>08/08/2017 08:50:28</publishTime>
+    </File>
+    <File Include="lib/leaflet/leaflet.js">
+      <publishTime>08/08/2017 08:51:38</publishTime>
+    </File>
+    <File Include="lib/leaflet/leaflet.js.map">
+      <publishTime>08/08/2017 08:51:38</publishTime>
+    </File>
+    <File Include="lib/leafletMap.js">
+      <publishTime>09/20/2017 09:38:23</publishTime>
+    </File>
+    <File Include="packages.config">
+      <publishTime>07/26/2017 10:55:48</publishTime>
+    </File>
+    <File Include="Web.config">
+      <publishTime>09/20/2017 09:38:33</publishTime>
+    </File>
+  </ItemGroup>
+</Project>
