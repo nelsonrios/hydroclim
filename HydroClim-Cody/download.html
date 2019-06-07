@@ -12,126 +12,85 @@
     <link href="lib/jquery-ui.css" rel="stylesheet" />
     <link href="lib/L.Control.MousePosition.css" rel="stylesheet" />
     <link rel=icon href=favicon.png sizes="any" type="image/png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.10/dist/css/bootstrap-select.min.css">
 </head>
 <body>
-    <nav class="navbar navbar-hydro navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a href="index.html" class="navbar-brand"><img style="width: 10ex;" src="img/white_logo.svg" /></a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a style="padding-top: 17.5px" class="text-clim" href="index.html">Home</a></li>
-                    <li><a style="padding-top: 17.5px" class="text-clim" href="About.html">About</a></li>
-                    <li><a style="padding-top: 17.5px" class="text-clim" href="Contact.html">Contact</a></li>
-                    <li class="dropdown">
-                        <a class="dropdown-toggle active" style="padding-top: 17.5px" data-toggle="dropdown" href="#">
-                            Data
-                            <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="text-clim" href="Hydroclim.html">Map</a></li>
-                            <li><a class="text-clim" href="download.html">Download</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
     <div class="container body-content">
         <div class="container body-content">
+
+  <div class="panel-group" id="accordion">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+          #1. Date and Basin Selection
+        </a>
+      </h4>
+    </div>
+      <div id="hydroclim-result1"></div>
+    <div id="collapseOne" class="panel-collapse collapse in">
+      <div class="panel-body">
+           <div class="hydroclim-data-collapse" id="first-part">
+                <!-- Data Selection -->
             <div>
-                <h6>Observed</h6>
-                <table id="historical-data" border='1'>
-                    <tr>
-                        <th>Select</th>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Country</th>
-                    </tr>
-                    <tr>
-                        <td style="padding: 1px;">
-                            <input type="checkbox" />
-                        </td>
-                        <td style="padding: 1px;">
-                            Historical
-                        </td>
-                        <td style="padding: 1px;">
-                            1950-1999
-                        </td>
-                        <td style="padding: 1px;">
-                            --
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            <div >
-                <h6>RCP 4.5</h6>
-                <table id="45-data" border='1'>
-                    <tr>
-                        <th>Select</th>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Country</th>
-                    </tr>
-                </table>
-            </div>
-            <div>
-                <h6>RCP 8.5</h6>
-                <table id="85-data" border='1'>
-                    <tr>
-                        <th>Select</th>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Country</th>
-                    </tr>
-                </table>
-            </div>
-            <div>
-                <h6>Date Selection</h6>
-                <div class="hydroclim-date-panel" id="hydroclim-date-panel-subset" style="border: 1px solid black">
+                <h3>Date Selection</h3>
+                <div class="hydroclim-date-panel" id="hydroclim-date-panel-subset" >
                     <div style="display:inline-block">
+                        <input id="timesub" type="radio" name="hydroclim-date"/> Subset:
                         <div class="hydroclim-data-options-start-selector">
-                            <div>
+                            <label class="hydroclim-data-options-label" for="hydroclim-data-date-selector">Month Selection</label>
+                             <label class="dropdown-label">From:&nbsp;</label>
+                            <select class="selectpicker" id="monthstart" name="monthstart"></select>
+
+                             <label class="dropdown-label">To:&nbsp;</label>
+                                        <select class="selectpicker" id="monthend" name="monthend"></select>
+
+                            <!--<div>
                                 <label class="hydroclim-data-options-label" for="hydroclim-data-date-selector">Month Selection</label>
                                 <div id="hydroclim-data-month-date-selector">
                                     <div class="date-selection-option" id="month-start-selection-picker">
                                         <label class="dropdown-label">From:&nbsp;</label>
-                                        <select id="monthstart" name="monthstart"></select>
+                                        <select class="selectpicker" id="monthstart" name="monthstart"></select>
                                     </div>
                                     <div class="date-selection-option" id="month-end-selection-picker">
                                         <label class="dropdown-label">To:&nbsp;</label>
-                                        <select id="monthend" name="monthend"></select>
+                                        <select class="selectpicker" id="monthend" name="monthend"></select>
                                     </div>
                                 </div>
-                            </div>
+                            </div>-->
                         </div>
+
                         <div class="hydroclim-data-options-end-selector">
                             <div>
                                 <label class="hydroclim-data-options-label" for="hydroclim-data-date-selector">Year Selection</label>
-                                <div id="hydroclim-data-year-date-selector">
-                                    <div class="date-selection-option" id="year-start-selection-picker">
-                                        <label class="dropdown-label">From:&nbsp;</label>
-                                        <select id="yearstart" name="yearstart"></select>
-                                    </div>
-                                    <div class="date-selection-option" id="year-end-selection-picker">
-                                        <label class="dropdown-label">To:&nbsp;</label>
-                                        <select id="yearend" name="yearend"></select>
-                                    </div>
-                                </div>
+                                 <label class="dropdown-label">From:&nbsp;</label>
+                                        <select class="selectpicker" id="yearstart" name="yearstart"></select>
+                                 <label class="dropdown-label">To:&nbsp;</label>
+                                        <select class="selectpicker" id="yearend" name="yearend"></select>
+
                             </div>
                         </div>
                     </div>
 
                     <div style="display:inline-block">
+                       <input id="timefull" type="radio" name="hydroclim-date" />  Full:
+
                         <div class="hydroclim-date-panel" id="hydroclim-date-panel-from-to">
-                            <div class="hydroclim-data-options-start-selector">
+                            <label class="hydroclim-data-options-label" for="hydroclim-data-date-selector">Starting Date Selection</label>
+                                    <label class="dropdown-label">Month:&nbsp;</label>
+                                            <select id="fullmonthstart" name="monthstart" class="selectpicker"></select>
+                             <label class="dropdown-label">Year&nbsp;</label>
+                                            <select id="fullyearstart" name="yearstart" class="selectpicker"></select>
+                            <label class="hydroclim-data-options-label" for="hydroclim-data-date-selector">Ending Date Selection</label>
+
+                                            <label class="dropdown-label">Month:&nbsp;</label>
+                                            <select id="fullmonthend" name="monthend" class="selectpicker"></select>
+
+                                            <label class="dropdown-label">Year&nbsp;</label>
+                                            <select id="fullyearend" name="yearend" class="selectpicker"></select>
+
+
+                            <!--<div class="hydroclim-data-options-start-selector">
                                 <div>
                                     <label class="hydroclim-data-options-label" for="hydroclim-data-date-selector">Starting Date Selection</label>
                                     <div id="hydroclim-data-month-date-selector">
@@ -161,27 +120,123 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div>-->
                     </div>
                 </div>
             </div>
+            <!-- Basin Selection -->
             <div>
-                <h6>Basin Selection</h6>
-                <table id="basin-data" border='1'>
+                <h3>Basin Selection</h3>
+                <select id="basin-data" data-width="auto" class="selectpicker" multiple data-actions-box="true" multiple title="Choose one or more basins of the following...">
+                </select>
+                <!--<table id="basin-data" border='1'>
                     <tr>
                         <th>Select</th>
                         <th>Name</th>
                         <th>Description</th>
                     </tr>
-                </table>
+                </table>-->
             </div>
+            </div>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+          #2. Model Selection
+        </a>
+      </h4>
+    </div>
+       <div id="hydroclim-result2"></div>
+    <div id="collapseTwo" class="panel-collapse collapse">
+      <div class="panel-body">
+          <!-- Data Type selection: Observed, RCP4.5, RCP 8.5-->
+            <div>
+                <h3>No-model</h3>
+                <input id='obs-r' type="checkbox" /> Observerd Data (add description)
+                <!--<table id="historical-data" border='1'>
+                    <tr>
+                        <th>Select</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Country</th>
+                    </tr>
+                    <tr>
+                        <td style="padding: 1px;">
+                            <input type="checkbox" />
+                        </td>
+                        <td style="padding: 1px;">
+                            Historical
+                        </td>
+                        <td style="padding: 1px;">
+                            1950-1999
+                        </td>
+                        <td style="padding: 1px;">
+                            --
+                        </td>
+                    </tr>
+                </table>-->
+            </div>
+          <div>
+               <h3>RCP </h3>
+            <div class="col-md-6">
+
+                <h6><input id="45-r" type="checkbox" name="hydroclim-rcp-models"/>RCP 4.5</h6>
+                    <select disabled id="45-data" class="selectpicker"  multiple data-actions-box="true" multiple title="Choose one or more models of the following...">
+
+                    </select>
+
+            </div>
+            <div class="col-md-6">
+                <h6><input id="85-r" type="checkbox" name="hydroclim-rcp-models"/>RCP 8.5</h6>
+                 <select disabled id="85-data" class="selectpicker"  multiple data-actions-box="true" multiple title="Choose one or more models of the following...">
+
+                    </select>
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+         #3. Statistics
+        </a>
+      </h4>
+    </div>
+       <div id="hydroclim-result3"></div>
+    <div id="collapseThree" class="panel-collapse collapse">
+      <div class="panel-body">
+          <h5><input type="checkbox" name="hydroclim-stasticis" id="hydroclim-stast-orig"/>Temperature and Discharge raw data</h5>
+
+         <h5>  <input type="checkbox" name="hydroclim-stasticis" id="hydroclim-stast"/>  Statistics of Temperature and Discharge data</h5>
+                <div id="stast-group">
+                <input type="checkbox" name="hydroclim-stas" value="Average "/> Average
+                <input type="checkbox" name="hydroclim-stas" value="Max "/> Max
+                <input type="checkbox" name="hydroclim-stas" value="Min "/> Min
+                <input type="checkbox" name="hydroclim-stas" value="Standard Deviation "/> Standard Deviation
+                <input type="checkbox" name="hydroclim-stas" value="Variance "/> Variance
+                </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      <div class="row">
+        <div class="col-md-2 col-xs-2 col1 center-block">
+      <button type="button" class="btn btn-success">Download your data!</button>
+        </div>
+      </div>
         </div>
     </div>  
     <script src="lib/jquery-3.2.1.min.js"></script>
     <script src="lib/jquery-ui.js"></script>
     <script src="lib/bootstrap/js/bootstrap.min.js"></script>
     <script src="js/data.js"></script>    
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.10/dist/js/bootstrap-select.min.js"></script>
     <script src="js/downloads.js"></script>
 </body>
 </html>
