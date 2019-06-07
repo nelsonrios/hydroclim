@@ -73,25 +73,25 @@
                             <div>
                             <label class="navbar-clim text-white hydroclim-sidebar-group-label">Data Selection</label>
                             <div class="btn-group  btn-group-justified" data-toggle="buttons" id="hydroclim-data-selector">
-                                <label class="btn btn-default active" style="padding: 0;"><input type="radio" name="data-selector" value="temp_and_flow" id="temp_and_flow" autocomplete="off">Temp & Flow</label>
+                                <!--<label class="btn btn-default active" style="padding: 0;"><input type="radio" name="data-selector" value="temp_and_flow" id="temp_and_flow" autocomplete="off">Temp & Flow</label>-->
                                 <label class="btn btn-default"><input type="radio" name="data-selector" value="temp" id="temp" autocomplete="off">Temp</label>
                                 <label class="btn btn-default"><input type="radio" name="data-selector" value="flow" id="flow" autocomplete="off">Flow</label>
                             </div>
                             <div class="btn-group  btn-group-justified" data-toggle="buttons" id="hydroclim-data-value-selector">
-                                <label class="btn btn-default active"><input type="radio" name="data-value-selector" value="low" id="low" autocomplete="off">Low</label>
+                                <!--<label class="btn btn-default active"><input type="radio" name="data-value-selector" value="low" id="low" autocomplete="off">Low</label>-->
                                 <label class="btn btn-default"><input type="radio" name="data-value-selector" value="" id="average" autocomplete="off">Average</label>
-                                <label class="btn btn-default"><input type="radio" name="data-value-selector" value="high" id="high" autocomplete="off">High</label>
+                                <!--<label class="btn btn-default"><input type="radio" name="data-value-selector" value="high" id="high" autocomplete="off">High</label>-->
                             </div>
                         </div>
                         <div>
                             <label class="navbar-clim text-white hydroclim-sidebar-group-label">Model Type Selection</label>
                             <div class="btn-group btn-group-justified" data-toggle="buttons" id="hydroclim-data-model-selector">
-                                <label class="btn btn-default active"><input type="radio" name="model-selector" value="historical" id="historical" autocomplete="off">Historical</label>
+                                <label class="btn btn-default active"><input type="radio" name="data-selector" value="Observed" id="Observed" autocomplete="off">Observed</label>
                                     <label class="btn btn-default"><input type="radio" name="data-selector" value="rcp45" id="rcp45" autocomplete="off">RCP 4.5</label>
                                     <label class="btn btn-default"><input type="radio" name="data-selector" value="rcp85" id="rcp85" autocomplete="off">RCP 8.5</label>
                                 </div>
-                            </div>
-                            <div>
+                            </div >
+                            <div id="data-selection-model">
                             <label class="navbar-clim text-white hydroclim-sidebar-group-label">Model Selection</label>
                                 <div id="hydroclim-data-style-selector">
                                 <select id="model" name="model"></select>

@@ -11,17 +11,23 @@ function initMap() {
     var wmts_url = "http://maps.hydroclim.org/geoserver/gwc/service/wmts?";
     var wms_cache_url = "http://maps.hydroclim.org/geoserver/gwc/service/wms?";
     var wms_url = "http://maps.hydroclim.org/geoserver/wms?";
-    var wms_local = "http://192.168.56.101:8080/geoserver/wms?";
-    //var wms_local = "http://maps.hydroclim.org/geoserver/wms?";
+    //var wms_local = "http://192.168.56.101:8080/geoserver/wms?";
+    var wms_local = "http://maps.hydroclim.org/geoserver/wms?";
+    //var wms_local = "http://localhost:8080/geoserver/hydroclim/wms?";
     var hydroclimMonthStart = 1;
     var hydroclimYearStart = 1950;
     var hydroclimMonthEnd = 1;
     var hydroclimYearEnd = 1950;
-    var hydroclimFullLayer = "aggregateReach";
-    var hydroclimSubsetLayer = "aggregateReachSubset";
+    //var hydroclimFullLayer = "aggregateReach";
+    var hydroclimFullLayer = "reach";
+	
+	var hydroclimModels = modelsList45;
+    
+	var hydroclimSubsetLayer = "aggregateReachSubset";
     var hydroclimLayer = hydroclimFullLayer;
 
-    var selectedStyle = 'hydroclim:temp_flow_5_degree';
+    //var selectedStyle = 'hydroclim:temp_flow_5_degree';
+    var selectedStyle = '';
     var defaultsChanged = false;
     var layerPanelHeight = "120px";
 
@@ -111,7 +117,7 @@ function initMap() {
     var overlays = {
         'NHD': nhd,
         'Basin': basin,
-        'Sub-basin': subbasin,
+        //'Sub-basin': subbasin,
         'Hydroclim': hydroclim
     }
 
@@ -417,6 +423,9 @@ function initMap() {
     function splitWords(str) {
         return trim(str).split(/\s+/);
     }
+	
+
+	
     ///////////////////////////////////////////////////
     /////////Add data to Month, Year, Style selectors
     ///////////////////////////////////////////////////
@@ -468,14 +477,24 @@ function initMap() {
             $('#seasons').append(newOption);
         }
     }
-    function createModelDropdowns() {
+    /*function createModelDropdowns() {
         var index, len;
         for (index = 0, len = hydroclimModels.length; index < len; ++index) {
             var style = hydroclimModels[index];
-            var newOption = $('<option value="' + style.value + '">' + style.name + '</option>');
+            var newOption = $('<option value="' + style.id + '">' + style.name + '</option>');
+            $('#model').append(newOption);
+        }
+    }*/
+	function updateModelDropdowns() {
+		$('#model').empty();
+        var index, len;
+        for (index = 0, len = hydroclimModels.length; index < len; ++index) {
+            var style = hydroclimModels[index];
+            var newOption = $('<option value="' + style.id + '">' + style.name + '</option>');
             $('#model').append(newOption);
         }
     }
+	
     //Hide Layer list to begin
     $(document).ready(function () {
         var fullPicker = $("#hydroclim-date-panel-from-to");
@@ -485,15 +504,23 @@ function initMap() {
         subsetPicker.css('display', 'none');
 
         $(".leaflet-control-layers-list").hide();
- 
+		
+		
+	//Add models selectors of RCP4.5 & RCP 8.5(from data.js)
         $("input[name=data-selector]").on("change", function () {
             var modelSelector = $("#data-selection-model");
             var val = $(this).val();
-            if (val == 'historical') {
+            if (val == 'Observed') {
                 modelSelector.css('display', 'none'); 
+				hydroclimModels = [];
             } else {
                 modelSelector.css('display', 'block');
+				if (val == 'rcp45')
+					hydroclimModels = modelsList45;
+				else
+					hydroclimModels = modelsList85; 
             }
+			updateModelDropdowns();
         });
 
         $("input[name=time-selector]").on("change", function () {
