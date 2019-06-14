@@ -65,12 +65,12 @@ $(function () {
              }
 
             if( $("input#timefull").is(':checked') ) {
-                var fullmonthstart = $("#fullmonthstart option:selected").text();
-                var fullmonthend = $("#fullmonthend option:selected").text();
-                var fullyearstart = $("#fullyearstart option:selected").text();
-                var fullyearend = $("#fullyearend option:selected").text();
+                var monthstart = $("#monthstart option:selected").text();
+               var monthend = $("#monthend option:selected").text();
+               var yearstart = $("#yearend option:selected").text();
+               var yearend = $("#yearend option:selected").text();
 
-                $('#hydroclim-result1').append($('<h6>time full:' + fullmonthstart + fullyearstart + '-' + fullmonthend + fullyearend + '</h6>'));
+                $('#hydroclim-result1').append($('<h6>time full:' +  monthstart + yearstart + '-'+ monthend + yearend + '</h6>'));
             }
            var basinselected = $("#basin-data option:selected").text();
            $('#hydroclim-result1').append($('<h6>'+ basinselected +'</h6>'));
