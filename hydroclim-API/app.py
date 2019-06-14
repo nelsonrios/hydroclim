@@ -15,8 +15,8 @@ from resources import BasinListResource
 basin = Namespace("basin")
 
 
-basin.add_resource(BasininfoResource,'/basininfo', endpoint = 'basin_info')
-basin.add_resource(BasinListResource,'/basinlist', endpoint = 'basin_list')
+basin.add_resource(BasininfoResource,'/basininfo/<string:id>', endpoint = 'basininfo')
+basin.add_resource(BasinListResource,'/basinlist', endpoint = 'basinlists')
 api.add_namespace(basin)
 
 
