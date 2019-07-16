@@ -99,7 +99,7 @@ function initMap() {
         dpiMode: 10,
         transparent: true,
         format: "image/png32",
-        srs: "EPSG:3857"
+        srs: "EPSG:900913"
     }).addTo(map);
     nhd.imageSrc = "NHD.PNG";
 
@@ -151,8 +151,121 @@ function initMap() {
 
     ////Add mouse position to map 
     L.control.mousePosition().addTo(map);
+	
+	
+	////Test Geojson from API
+	map.on('click', function(e) {
+		console.time('API')
+		//alert('lat：' + e.latlng.lat + '\n long：' + e.latlng.lng);
+		getReachShape(e.latlng.lat, e.latlng.lng)
+	});
+	function getReachShape(lat,lng){
+		 $.ajax({
+        //url: "http://127.0.0.1:5000/v1/basin/basin", 
+        //url: "http://127.0.0.1:5000/v1/reach/reach",
+		url: "http://127.0.0.1:5000/v1/reach/reach?X=" + lat + "&Y="+ lng,
+		type: "GET",             
+        data: {},
+        dataType: 'json',
+        cache: false,
+		beforeSend:function(XMLHttpRequest){
+			$("#loading").html("<img src='https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif'/>");
+		},
+        success: function(data)
+			{
+				if (JSON.stringify(data) == '{}'){
+					alert('There are no Reaches here');
+				}
+				else{
+				var geojsonLayer = new L.GeoJSON(data,{
+					onEachFeature: function (feature, layer) {
+						var html_prop ="";
+						for(var prop in feature.properties){
+								html_prop = html_prop + '<tr><td>'+prop+'</td><td>'+feature.properties[prop]+'</td></tr>'
+							}
+						layer.bindPopup('<table>' + html_prop + '</table>');
+						}
+					});
+				geojsonLayer.addTo(map);
+				}
+				$("#loading").empty();
+				console.timeEnd('API')
+			},
+			error: function (request, status, error) {
+				$("#loading").empty();
+				console.log(error);
+			}
+		});
+	}
+	
+	////// Test GeoServer 
+	////// Test GeoServer 
+/*map.on('click', function(e) {
+		console.time('GeoServer')
+		//alert('lat：' + e.latlng.lat + '\n long：' + e.latlng.lng);
+		var basin_id;
+		loadWFS("cite:basin","EPSG:4326",'CONTAINS(geom, POINT (' + e.latlng.lng +' ' + e.latlng.lat +'))', function loadWfsHandler(data) {
+                console.log(data);
+				if(data.features.length > 0)
+				{
+					basin_id = data.features[0].properties.basin_info_id;
+					loadWFS("cite:reach","EPSG:4326",'basin_id = ' + basin_id, function loadWfsReach(data){
+						layer = L.geoJson(data,{
+					onEachFeature: function (feature, layer) {
+						var html_prop ="";
+						for(var prop in feature.properties){
+								html_prop = html_prop + '<tr><td>'+prop+'</td><td>'+feature.properties[prop]+'</td></tr>'
+							}
+						layer.bindPopup('<table>' + html_prop + '</table>');
+						}
+					})
+						layer.addTo(map)
+						console.timeEnd('GeoServer')
+					})
+					
+				}
+				else
+					alert('There are no Reaches here');
 
+            })
+		
+	});
+	var layer;
+	//loadWFS("cite:reach", "EPSG:4326")
+	function loadWFS(layerName, epsg, CQL_string,func) {
+            var urlString = "http://localhost:8080/geoserver/cite/ows";
+            var param = {
+                service: 'WFS',
+                version: '1.0.0',
+                request: 'GetFeature',
+                typeName: layerName,
+				//outputFormat:'json',
+				//format_options:'callback:loadWfsHandler',
+                outputFormat: 'application/json',
+                maxFeatures:3200,
+                srsName: epsg,
+				CQL_FILTER:CQL_string
+            };
+            var u = urlString + L.Util.getParamString(param, urlString);
+            
+            console.log(u);          
+            $.ajax({
+				//jsonp: false,
+				//jsonpCallback: 'getJson',
+                url:u,
+				type:'GET',
+                dataType: 'json',
+                success: func, 
 
+               });
+           
+        }*/
+		
+		
+	
+		
+	
+ 
     //////////Allow drawable polygons on map
     //// Initialise the FeatureGroup to store editable layers
     //var editableLayers = new L.FeatureGroup();

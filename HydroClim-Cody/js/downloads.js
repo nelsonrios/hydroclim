@@ -16,6 +16,49 @@ $(function () {
             $('<option value="' + item.id + '">' + item.name + '</option>'));
     });
 });
+
+//download data
+$('#basin-data').change(function () {
+        var selectedItem = $('#basin-data').val();
+        alert(selectedItem);
+    });
+$("#submitform").submit(function(e) {
+
+    e.preventDefault(); // avoid to execute the actual submit of the form.
+
+    var form = $(this);
+    //var url = form.attr('action');
+	var string = form.serialize()
+	var basin_id = "&basin_id=" + String($('#basin-data').val());
+    /*$.ajax({
+           type: "GET",
+           url: "http://127.0.0.1:5000/v1/records/reachdata",
+           data: string + basin_id, // serializes the form's elements.
+           success: function(result)
+           {
+                var uri = 'data:application/csv;charset=UTF-8,' + encodeURIComponent(result);
+				window.open(uri, 'result.csv');
+           }
+         });*/
+		const saveData = (function () {
+		const a = document.createElement("a");
+		document.body.appendChild(a);
+		a.style = "display: none";
+		return function (url, fileName) {
+			a.href = url;
+			a.download = fileName;
+			a.click();
+			};
+		}());
+
+	const url ='http://127.0.0.1:5000/v1/records/reachdata?' + string + basin_id,
+	fileName = "my-csv.csv";
+
+saveData(url, fileName);
+
+
+});
+
 createYearDropdowns();
 createMonthDropdowns();
 function createYearDropdowns() {

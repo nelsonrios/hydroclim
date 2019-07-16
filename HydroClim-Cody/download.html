@@ -17,7 +17,7 @@
 <body>
     <div class="container body-content">
         <div class="container body-content">
-
+<form id="submitform">
   <div class="panel-group" id="accordion">
   <div class="panel panel-default">
     <div class="panel-heading">
@@ -94,7 +94,7 @@
             <!-- Basin Selection -->
             <div>
                 <h3>Basin Selection</h3>
-                <select id="basin-data" data-width="auto" class="selectpicker" multiple data-actions-box="true" multiple title="Choose one or more basins of the following...">
+                <select form="submitform" name="basin_id" id="basin-data" data-width="auto" class="selectpicker" multiple data-actions-box="true" multiple title="Choose one or more basins of the following...">
                 </select>
                 <!--<table id="basin-data" border='1'>
                     <tr>
@@ -122,7 +122,7 @@
           <!-- Data Type selection: Observed, RCP4.5, RCP 8.5-->
             <div>
                 <h3>No-model</h3>
-                <input id='obs-r' type="checkbox" /> Observerd Data (add description)
+                <input id='obs-r' name="isobserved" type="checkbox" /> Observerd Data (add description)
                 <!--<table id="historical-data" border='1'>
                     <tr>
                         <th>Select</th>
@@ -194,9 +194,10 @@
 
       <div class="row">
         <div class="col-md-2 col-xs-2 col1 center-block">
-      <button type="button" class="btn btn-success">Download your data!</button>
+      <button type="submit" class="btn btn-success"> Download your data!</button>
         </div>
       </div>
+</form>
         </div>
     </div>  
     <script src="lib/jquery-3.2.1.min.js"></script>
