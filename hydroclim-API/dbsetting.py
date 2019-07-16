@@ -1,6 +1,6 @@
 DB_USER = "postgres"
-DB_PASSWORD = "postgres"
-HOST = "127.0.0.1"
-DB_NAME = "hydroclimtest"
+DB_PASSWORD = "891104"
+HOST = "localhost"
+DB_NAME = "t2"
 
 DB_URI = 'postgres://' + DB_USER + ':' + DB_PASSWORD + "@" + HOST + '/' + DB_NAME
