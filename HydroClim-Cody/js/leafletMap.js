@@ -57,7 +57,7 @@ function initMap() {
     );
     subbasin.imageSrc = "Subbasin.PNG";
 
-    var basin = new L.TileLayer.WMS(wms_url,
+    /*var basin = new L.TileLayer.WMS(wms_url,
         {
             layers: "hydroclim:basin",
             format: 'image/png',
@@ -65,8 +65,31 @@ function initMap() {
             zIndex: 50,
             tiled: true
         }
-    );
+    );*/
+	var basin = new L.GeoJSON.AJAX("http://127.0.0.1:5000/v1/basin/basin",{
+					style:function(feature){
+						return {color: "brown"}
+					},
+					onEachFeature: function (feature, layer) {
+						var html_prop ="";
+						for(var prop in feature.properties){
+								html_prop = html_prop + '<tr><td>'+prop+'</td><td>'+feature.properties[prop]+'</td></tr>'
+							}
+						layer.bindPopup('<table>' + html_prop + '</table>');
+						}
+					});
     basin.imageSrc = "Basin.PNG";
+	
+	var reaches = new L.GeoJSON.AJAX("http://127.0.0.1:5000/v1/reach/reach",{
+					onEachFeature: function (feature, layer) {
+						var html_prop ="";
+						for(var prop in feature.properties){
+								html_prop = html_prop + '<tr><td>'+prop+'</td><td>'+feature.properties[prop]+'</td></tr>'
+							}
+						layer.bindPopup('<table>' + html_prop + '</table>');
+						}
+					});
+    reaches.imageSrc = "Reach.PNG";
 
     /////Google Satellite layer
     var satMutant = L.gridLayer.googleMutant({
@@ -105,6 +128,25 @@ function initMap() {
 
     addAggregateHydroclimLayer(hydroclimMonthStart, hydroclimMonthEnd, hydroclimYearStart, hydroclimYearEnd, selectedStyle);
 
+	hydroclim = new L.GeoJSON.AJAX("http://127.0.0.1:5000/v1/records/getreachdata",{
+					style: function(feature) {
+						d = feature.properties.temp;
+							return d > 20 ? {color: 'red', opacity:0.7} :
+								d > 15  ? {color: 'orange', opacity:0.7} :
+								d > 10  ? {color: 'yellow', opacity:0.7} :
+								d > 5  ? {color: 'green', opacity:0.7} :
+											{color: 'blue', opacity:0.7};
+
+								},
+					onEachFeature: function (feature, layer) {
+						var html_prop ="";
+						for(var prop in feature.properties){
+								html_prop = html_prop + '<tr><td>'+prop+'</td><td>'+feature.properties[prop]+'</td></tr>'
+							}
+						layer.bindPopup('<table>' + html_prop + '</table>');
+						}
+					});
+
     hydroclim.imageSrc = "Reach.PNG";
 
     var baseMaps = {
@@ -118,7 +160,8 @@ function initMap() {
         'NHD': nhd,
         'Basin': basin,
         //'Sub-basin': subbasin,
-        'Hydroclim': hydroclim
+		'Reaches': reaches,
+        'Hydroclim': hydroclim,
     }
 
     /////Add layer controls to control panel
@@ -157,13 +200,14 @@ function initMap() {
 	map.on('click', function(e) {
 		console.time('API')
 		//alert('lat：' + e.latlng.lat + '\n long：' + e.latlng.lng);
-		getReachShape(e.latlng.lat, e.latlng.lng)
+		//getReachShape(e.latlng.lat, e.latlng.lng)
 	});
 	function getReachShape(lat,lng){
 		 $.ajax({
         //url: "http://127.0.0.1:5000/v1/basin/basin", 
         //url: "http://127.0.0.1:5000/v1/reach/reach",
 		url: "http://127.0.0.1:5000/v1/reach/reach?X=" + lat + "&Y="+ lng,
+		//url: "http://127.0.0.1:5000/v1/records/getreachdata",
 		type: "GET",             
         data: {},
         dataType: 'json',
