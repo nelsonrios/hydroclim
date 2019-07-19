@@ -18,6 +18,7 @@ from resources import BasinListResource
 from resources import BasinResource
 from resources import ReachResource
 from resources import ReachDataResource
+from resources import getReachData
 
 basin = Namespace("basin")
 
@@ -37,6 +38,7 @@ reach.add_resource(ReachResource, "/reach", endpoint = 'reaches')
 api.add_namespace(reach)
 
 records.add_resource(ReachDataResource, "/reachdata", endpoint = 'records')
+records.add_resource(getReachData, "/getreachdata", endpoint = 'reachrecord')
 api.add_namespace(records)
 
 #Model NameSpace

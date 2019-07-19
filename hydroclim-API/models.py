@@ -62,6 +62,7 @@ class Reach(Base):
     HydroID = Column(Integer)
     OutletID = Column(Integer)
     basin_id = Column(Integer)
+    id = Column(Integer)
     #basin_shp_id = Column(Integer)
 
 class ReachData(Base):

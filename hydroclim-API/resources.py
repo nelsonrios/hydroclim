@@ -165,6 +165,48 @@ class ReachResource(Resource):
             json = jsonify({"type":"FeatureCollection","features":data})
             return json
 
+class getReachData(Resource):
+    """
+    Return csv of reaches temp&flow information
+    @url: /reachdata
+    @method: GET
+    @return: csv of temp&flow information
+    @return-type: csv
+    @raise keyError: raises an exception
+    """
+    def get(self):
+        smapping = geo.mapping
+        reaches = session.query(functions.ST_Transform(Reach.geom,4326), Reach.OBJECTID,Reach.ARCID,  Reach.Shape_Leng, ReachData, RecordDateData).join(ReachData,Reach.id == ReachData.rch).join(RecordDateData, ReachData.record_month_year_id == RecordDateData.id).\
+            filter(RecordDateData.year == 1950).filter(RecordDateData.month == 1).all();
+        data = [{"type": "Feature",
+                 "properties": {"OBJECTID": reach.OBJECTID,
+                                "ARCID": reach.ARCID,
+                                #"GRID_CODE": reach.GRID_CODE,
+                                #"AreaC": reach.AreaC,
+                                #"Dep2": reach.Dep2,
+                                #"FROM_NODE": reach.FROM_NODE,
+                                #"TO_NODE": reach.TO_NODE,
+                                #"HydroID": reach.HydroID,
+                                #"Len2": reach.Len2,
+                                #"MaxEl": reach.MaxEl,
+                                #"Len2": reach.Len2,
+                                #"MinEl": reach.MinEl,
+                                #"OutletID": reach.OutletID,
+                                "Shape_Leng": reach.Shape_Leng,
+                                #"Slo2": reach.Slo2,
+                                #"Subbasin": reach.Subbasin,
+                                #"SubbasinR": reach.SubbasinR,
+                                #"Wid2": reach.Wid2,
+                                "temp": reach.ReachData.wtmpdegc,
+                                "discharge": reach.ReachData.flow_outcms
+                                },
+                 "geometry": {"type": "LineString",
+                              "coordinates": smapping(to_shape(reach[0]))["coordinates"]
+                              },
+                 } for reach in reaches]
+        json = jsonify({"type": "FeatureCollection", "features": data})
+        return json
+
 parser.add_argument('monthstart', type=int)
 parser.add_argument('monthend', type=int)
 parser.add_argument('yearstart', type=int)
