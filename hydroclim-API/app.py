@@ -13,12 +13,14 @@ class UserApi(Resource):
         return {'user': '1'}
 
 #Basin NameSpace
+
 from resources import BasininfoResource
 from resources import BasinListResource
 from resources import BasinResource
 from resources import ReachResource
 from resources import ReachDataResource
 from resources import getReachData
+from resources import ReachDataZip
 
 basin = Namespace("basin")
 
@@ -39,6 +41,7 @@ api.add_namespace(reach)
 
 records.add_resource(ReachDataResource, "/reachdata", endpoint = 'records')
 records.add_resource(getReachData, "/getreachdata", endpoint = 'reachrecord')
+records.add_resource(ReachDataZip, "/reachdatazip", endpoint = 'reachrecordzip')
 api.add_namespace(records)
 
 #Model NameSpace

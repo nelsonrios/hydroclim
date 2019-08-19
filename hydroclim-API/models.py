@@ -75,6 +75,7 @@ class ReachData(Base):
     record_month_year_id = Column(Integer)
     is_observed = Column(Boolean)
     basin_id = Column(Integer)
+    model_id = Column(Integer)
 
 class RecordDateData(Base):
     __tablename__ = 'record_month_year'
