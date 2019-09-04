@@ -1,1 +1,1 @@
-SHAPEFILES_PATH = "J:\\hydroclim_data\\" #for win
+SHAPEFILES_PATH = "H:\\hydroclim_data\\" #for win
