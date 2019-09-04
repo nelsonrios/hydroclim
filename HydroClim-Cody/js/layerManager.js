@@ -648,7 +648,7 @@ L.Control.LayerManager = L.Control.extend({
 	removeLayer: function (layer) {
 		layer.off('add remove', this._onLayerChange, this);
 
-		var obj = this._getLayer(stamp(layer));control-layers-list
+		var obj = this._getLayer(stamp(layer));//control-layers-list
 		if (obj) {
 			this._layers.splice(this._layers.indexOf(obj), 1);
 		}

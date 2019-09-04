@@ -15,8 +15,41 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.10/dist/css/bootstrap-select.min.css">
 </head>
 <body>
+    <nav class="navbar navbar-hydro navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="index.html" class="navbar-brand"><img style="width: 10ex;" src="img/white_logo.svg" /></a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a style="padding-top: 17.5px" class="text-clim" href="index.html">Home</a></li>
+                    <li><a style="padding-top: 17.5px" class="text-clim" href="About.html">About</a></li>
+                    <li><a style="padding-top: 17.5px" class="text-clim" href="Contact.html">Contact</a></li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle active"  style="padding-top: 17.5px" data-toggle="dropdown" href="#">
+                            Data
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="text-clim" href="Hydroclim.html">Map</a></li>
+                            <li><a class="text-clim" href="download.html">Download</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
     <div class="container body-content">
         <div class="container body-content">
+		<div>
+		<p></p>
+		<p>This page allow you download the‘HydroClim’ datasets, providing monthly streamflow and water temperature predictions for stream sections in all major watersheds across the United States from 1950-2099.</p></div>
 <form id="submitform">
   <div class="panel-group" id="accordion">
   <div class="panel panel-default">
@@ -122,7 +155,7 @@
           <!-- Data Type selection: Observed, RCP4.5, RCP 8.5-->
             <div>
                 <h3>No-model</h3>
-                <input id='obs-r' name="isobserved" type="checkbox" /> Observerd Data (add description)
+                <input id='obs-r' name="isobserved" type="checkbox" /> Observerd Data (1950 - 1999)
                 <!--<table id="historical-data" border='1'>
                     <tr>
                         <th>Select</th>
@@ -150,14 +183,14 @@
                <h3>RCP </h3>
             <div class="col-md-6">
 
-                <h6><input id="45-r" type="checkbox" name="hydroclim-rcp-models"/>RCP 4.5</h6>
+                <h6><input id="45-r" type="checkbox" name="hydroclim-rcp-models"/>RCP 4.5 (1950 - 2099)</h6>
                     <select disabled id="45-data" class="selectpicker"  multiple data-actions-box="true" multiple title="Choose one or more models of the following...">
 
                     </select>
 
             </div>
             <div class="col-md-6">
-                <h6><input id="85-r" type="checkbox" name="hydroclim-rcp-models"/>RCP 8.5</h6>
+                <h6><input id="85-r" type="checkbox" name="hydroclim-rcp-models"/>RCP 8.5 (1950 - 2099)</h6>
                  <select disabled id="85-data" class="selectpicker"  multiple data-actions-box="true" multiple title="Choose one or more models of the following...">
 
                     </select>
