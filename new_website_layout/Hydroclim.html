@@ -1,0 +1,192 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HydroClim</title>
+    <link href="lib/leaflet/leaflet.css" rel="stylesheet" />
+    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="lib/L.Control.ZoomDisplay.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/site.css" />
+    <link href="lib/leaflet.fullscreen.css" rel="stylesheet" />
+    <link href="lib/L.Control.MousePosition.css" rel="stylesheet" />
+    <link rel=icon href=favicon.png sizes="any" type="image/png">
+</head>
+<body>
+    <nav class="navbar navbar-hydro navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="index.html" class="navbar-brand"><img style="width: 10ex;" src="img/white_logo.svg" /></a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a style="padding-top: 17.5px" class="text-clim" href="index.html">Home</a></li>
+                    <li><a style="padding-top: 17.5px" class="text-clim" href="About.html">About</a></li>
+                    <li><a style="padding-top: 17.5px" class="text-clim" href="Contact.html">Contact</a></li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle active"  style="padding-top: 17.5px" data-toggle="dropdown" href="#">
+                            Data
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="text-clim" href="Hydroclim.html">Map</a></li>
+                            <li><a class="text-clim" href="download.html">Download</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="map-container">
+        <div class="map-parent section collapse in" id="map-side-panel">
+            <div class="map-parent-inner">
+                    <div class="layers-container">
+                    <label class="navbar-hydro text-white hydroclim-sidebar-group-label" 
+                           data-toggle="collapse"
+                           data-target="#map-options-group">Map Options</label>
+                    <div class="hydroclim-sidebar-group collapse in" id="map-options-group">
+                        <div>
+                            <label class="navbar-clim text-white hydroclim-sidebar-group-label" for="hydroclim-layers-base-maps">Base Maps</label>
+                        <div class="hydroclim-layers-base-maps" id="hydroclim-layers-base-maps">
+
+                        </div>
+
+                            <label class="navbar-clim text-white hydroclim-sidebar-group-label" for="hydroclim-layers-overlays">Overlays</label>
+                        <div class="hydroclim-layers-overlays" id="hydroclim-layers-overlays">
+
+                        </div>
+                    </div>
+                </div>
+                </div>
+                <hr style="width: 262px;" size="3"/>
+                <div class="layers-container" id="data-selection-group">
+                    <label class="navbar-hydro text-white hydroclim-sidebar-group-label"
+                           data-toggle="collapse"
+                           data-target="#hydroclim-options-group">Hydroclim Options</label>
+                    <div class="hydroclim-sidebar-group collapse in" id="hydroclim-options-group">
+                            <div>
+                            <label class="navbar-clim text-white hydroclim-sidebar-group-label">Data Selection</label>
+                            <div class="btn-group  btn-group-justified" data-toggle="buttons" id="hydroclim-data-selector">
+                                <!--<label class="btn btn-default active" style="padding: 0;"><input type="radio" name="data-selector" value="temp_and_flow" id="temp_and_flow" autocomplete="off">Temp & Flow</label>-->
+                                <label class="btn btn-default"><input type="radio" name="data-selector" value="temp" id="temp" autocomplete="off">Temp</label>
+                                <label class="btn btn-default"><input type="radio" name="data-selector" value="flow" id="flow" autocomplete="off">Flow</label>
+                            </div>
+                            <div class="btn-group  btn-group-justified" data-toggle="buttons" id="hydroclim-data-value-selector">
+                                <!--<label class="btn btn-default active"><input type="radio" name="data-value-selector" value="low" id="low" autocomplete="off">Low</label>-->
+                                <label class="btn btn-default"><input type="radio" name="data-value-selector" value="" id="average" autocomplete="off">Average</label>
+                                <!--<label class="btn btn-default"><input type="radio" name="data-value-selector" value="high" id="high" autocomplete="off">High</label>-->
+                            </div>
+                        </div>
+                        <div>
+                            <label class="navbar-clim text-white hydroclim-sidebar-group-label">Model Type Selection</label>
+                            <div class="btn-group btn-group-justified" data-toggle="buttons" id="hydroclim-data-model-selector">
+                                <label class="btn btn-default active"><input type="radio" name="data-selector" value="Observed" id="Observed" autocomplete="off">Observed</label>
+                                    <label class="btn btn-default"><input type="radio" name="data-selector" value="rcp45" id="rcp45" autocomplete="off">RCP 4.5</label>
+                                    <label class="btn btn-default"><input type="radio" name="data-selector" value="rcp85" id="rcp85" autocomplete="off">RCP 8.5</label>
+                                </div>
+                            </div >
+                            <div id="data-selection-model">
+                            <label class="navbar-clim text-white hydroclim-sidebar-group-label">Model Selection</label>
+                                <div id="hydroclim-data-style-selector">
+                                <select id="model" name="model"></select>
+                                </div>
+                        </div>
+                            <div>
+                            <label class="navbar-clim text-white hydroclim-sidebar-group-label" for="hydroclim-data-time-selector">Time Scale</label>
+                            <div class="btn-group btn-group-justified" data-toggle="buttons" id="hydroclim-data-time-selector">
+                                    <label class="btn btn-default active"><input type="radio" name="time-selector" id="time-selector" value="full" autocomplete="off">Full</label>
+                                    <label class="btn btn-default"><input type="radio" name="time-selector" id="time-selector" value="subset" autocomplete="off">Subset</label>
+                                </div>
+                            </div>
+                        <div class="hydroclim-date-panel" id="hydroclim-date-panel-subset">
+                            <div class="hydroclim-data-options-start-selector">
+                                <label class="navbar-clim text-white hydroclim-sidebar-group-label" for="hydroclim-data-date-selector">Month Selection</label>
+                                    <div id="hydroclim-data-month-date-selector">
+                                        <div class="date-selection-option" id="month-start-selection-picker">
+                                            <label class="dropdown-label">From:&nbsp;</label>
+                                            <select id="monthstart" name="monthstart"></select>
+                                        </div>
+                                        <div class="date-selection-option" id="month-end-selection-picker">
+                                            <label class="dropdown-label">To:&nbsp;</label>
+                                            <select id="monthend" name="monthend"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                            <div class="hydroclim-data-options-end-selector">
+                                <label class="navbar-clim text-white hydroclim-sidebar-group-label" for="hydroclim-data-date-selector">Year Selection</label>
+                                    <div id="hydroclim-data-year-date-selector">
+                                        <div class="date-selection-option" id="year-start-selection-picker">
+                                            <label class="dropdown-label">From:&nbsp;</label>
+                                            <select id="yearstart" name="yearstart"></select>
+                                        </div>
+                                        <div class="date-selection-option" id="year-end-selection-picker">
+                                            <label class="dropdown-label">To:&nbsp;</label>
+                                            <select id="yearend" name="yearend"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <div class="hydroclim-date-panel" id="hydroclim-date-panel-from-to">
+                            <div class="hydroclim-data-options-start-selector">
+                                <label class="navbar-clim text-white hydroclim-sidebar-group-label" for="hydroclim-data-date-selector">Starting Date Selection</label>
+                                    <div id="hydroclim-data-month-date-selector">
+                                        <div class="date-selection-option" id="month-selection-picker">
+                                            <label class="dropdown-label">Month:&nbsp;</label>
+                                            <select id="fullmonthstart" name="monthstart"></select>
+                                        </div>
+                                        <div class="date-selection-option" id="year-selection-picker">
+                                            <label class="dropdown-label">Year&nbsp;</label>
+                                            <select id="fullyearstart" name="yearstart"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                            <div class="hydroclim-data-options-end-selector">
+                                <label class="navbar-clim text-white hydroclim-sidebar-group-label" for="hydroclim-data-date-selector">Ending Date Selection</label>
+                                    <div id="hydroclim-data-month-date-selector">
+                                        <div class="date-selection-option" id="month-selection-picker">
+                                            <label class="dropdown-label">Month:&nbsp;</label>
+                                            <select id="fullmonthend" name="monthend"></select>
+                                        </div>
+                                        <div class="date-selection-option" id="year-selection-picker">
+                                            <label class="dropdown-label">Year&nbsp;</label>
+                                            <select id="fullyearend" name="yearend"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <hr style="width: 262px;" size="3"/>
+                                </div>
+                            </div>
+        <div class="map-child section">
+            <div id="map" class="map">
+			<div id="loading"></div>
+			</div>
+        </div>
+    </div>
+    <script src="lib/leaflet/leaflet.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-ajax/2.1.0/leaflet.ajax.js"></script>
+    <script src="lib/leaflet-tilelayer-wmts.js"></script>
+    <script src="lib/L.Control.MousePosition.js"></script>
+    <script src="lib/L.Control.ZoomDisplay.js"></script>
+    <script src="lib/esri-leaflet.js"></script>
+    <script src="https://unpkg.com/es6-promise@4.0.5/dist/es6-promise.min.js"></script>
+    <script>ES6Promise.polyfill();</script>
+    <script src="lib/Leaflet.GoogleMutant.js"></script>
+    <script src="lib/Leaflet.fullscreen.min.js"></script>
+    <script src="lib/jquery-3.2.1.min.js"></script>
+    <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/layerManager.js"></script>
+    <script src="js/leafletMap.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBjD5mSUeQs-WDATL5gpSJa2KZmuXDBQP4"
+            async defer></script>
+</body>
+</html>
