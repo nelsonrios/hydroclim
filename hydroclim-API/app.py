@@ -21,6 +21,7 @@ from resources import ReachResource
 from resources import ReachDataResource
 from resources import getReachData
 from resources import ReachDataZip
+from resources import getAllReachData
 
 basin = Namespace("basin")
 
@@ -41,6 +42,7 @@ api.add_namespace(reach)
 
 records.add_resource(ReachDataResource, "/reachdata", endpoint = 'records')
 records.add_resource(getReachData, "/getreachdata", endpoint = 'reachrecord')
+records.add_resource(getAllReachData, "/getallreachdata", endpoint = 'allreachrecord')
 records.add_resource(ReachDataZip, "/reachdatazip", endpoint = 'reachrecordzip')
 api.add_namespace(records)
 

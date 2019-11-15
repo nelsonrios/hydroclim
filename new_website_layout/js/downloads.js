@@ -55,7 +55,14 @@ $("#submitform").submit(function(e) {
 	// setTimeout(function() {
       //      setTimeout(function() {showSpinner();},3000000000000000000);
       showSpinner()   
-	
+	 dateValidation();
+	 basinValidation();
+	 modelValidation();
+    if(validateValue == false)	{
+		alert("please check your form!")
+		return validateValue;
+	}
+	else{	 
     var form = $(this);
 	var api_url = 'http://127.0.0.1:5000';
     //var url = form.attr('action');
@@ -191,6 +198,8 @@ saveData(url, fileName);
 alert("Download will start in a few minutes!")
 
 
+}
+
 
 
 });
@@ -224,6 +233,154 @@ function createMonthDropdowns() {
         $('#fullmonthend').append(newOption.clone());
     }
 }
+
+//validate after select date
+$("select.selectpicker.date-selection").change(function(){
+	dateValidation();
+})
+$("input#45-r").change(function(){
+	rcpValidation()
+})
+$("input#85-r").change(function(){
+	rcpValidation()
+})
+$("input#obs-r").change(function(){
+	modelValidation()
+})
+$("#basin-data").change(function(){
+	basinValidation();
+})
+
+//validate Date
+function dateValidation(){
+	 var monthstart = $("#monthstart option:selected").val();
+     var monthend = $("#monthend option:selected").val();
+     var yearstart = $("#yearstart option:selected").text();
+     var yearend = $("#yearend option:selected").text();
+	 var timerange = 1;
+	 if($("input#timefull").is(':checked') ) timerange =2
+	 if(!checkDate(yearstart,yearend,monthstart,monthend, timerange))
+	 {
+		  validateValue = false;
+		 showWarningMsg("#warning-date");
+		 showWarningMsg("#warning-date-r");
+		 }
+	 else
+	 {
+		  validateValue = true;
+		 hideWarningMsg("#warning-date");
+		 hideWarningMsg("#warning-date-r");
+		 }
+}
+//basin option validation
+function basinValidation(){
+	var basinselected = $("#basin-data option:selected").text();
+	if (basinselected == "" )  {
+		 validateValue = false;
+		 showWarningMsg("#warning-basin");
+		 showWarningMsg("#warning-basin-r");
+		 }
+	 else
+	 {
+		  validateValue = true;
+		 hideWarningMsg("#warning-basin");
+		 hideWarningMsg("#warning-basin-r");
+		 }
+}
+
+//model option validation
+function modelValidation(){
+	if ( (!$("input#obs-r").is(':checked')) && (!$("input#45-r").is(':checked')) && (!$("input#85-r").is(':checked')))  {
+		 validateValue = false;
+		 showWarningMsg("#warning-model");
+		 showWarningMsg("#warning-model-r");
+		 }
+	 else
+	 {
+		  validateValue = true;
+		 hideWarningMsg("#warning-model");
+		 hideWarningMsg("#warning-model-r");
+		 hideWarningMsg("#warning-rcp");
+			hideWarningMsg("#warning-rcp-r");
+		 }
+}
+
+//observed model option validation
+function observedmodelValidation(){
+	if ( (!$("input#obs-r").is(':checked')))  {
+		 validateValue = false;
+		 showWarningMsg("#warning-model");
+		 showWarningMsg("#warning-model-r");
+		 }
+	 else
+	 {
+		  validateValue = true;
+		 hideWarningMsg("#warning-model");
+		 hideWarningMsg("#warning-model-r");
+		 }
+}
+//
+function rcpValidation(){
+	 if( $("input#45-r").is(':checked') ){
+		 var model45selected = $("#45-data option:selected").text();
+         if(model45selected == ""){
+			  validateValue = false;
+			showWarningMsg("#warning-rcp");
+			showWarningMsg("#warning-rcp-r");
+			}
+		else
+		{
+			 validateValue = true;
+			hideWarningMsg("#warning-rcp");
+			hideWarningMsg("#warning-rcp-r");
+		 }
+       }
+	  
+	 if( $("input#85-r").is(':checked') ){
+		 var model85selected = $("#85-data option:selected").text();
+         if(model85selected == ""){
+			  validateValue = false;
+			showWarningMsg("#warning-rcp");
+			showWarningMsg("#warning-rcp-r");
+			}
+		else
+		{
+			 validateValue = true;
+			hideWarningMsg("#warning-rcp");
+			hideWarningMsg("#warning-rcp-r");
+		 }
+       }
+	   if ( ($("input#obs-r").is(':checked')))  {
+		    validateValue = true;
+		 hideWarningMsg("#warning-rcp");
+		 hideWarningMsg("#warning-rcp-r");
+		 }
+	   	modelValidation();
+}
+
+//stats option validation
+function statsValidation(){
+	if (  (!$("input#hydroclim-stast-orig").is(':checked')) && (!$("input#hydroclim-stast").is(':checked')))  {
+		 showWarningMsg("#warning-stats");
+		 showWarningMsg("#warning-stats-r");
+		 validateValue = false;
+		 }
+	 else
+	 {
+		  validateValue = true;
+		 hideWarningMsg("#warning-stats");
+		 hideWarningMsg("#warning-stats-r");
+		 }
+}
+
+
+$("input#hydroclim-stast").change(function(){
+	if( $("input#hydroclim-stast").is(':checked') ) {
+		$("input[name=hydroclim-stas]").prop("disabled", false);
+	}
+	else
+		$("input[name=hydroclim-stas]").prop("disabled", true);
+});
 
 
 $(function () {
@@ -291,7 +448,7 @@ $(function () {
 
          $('#hydroclim-result2').show();
       })
-   }); 
+   });
 
 $(function () {
       $('#collapseThree').on('show.bs.collapse', function () {

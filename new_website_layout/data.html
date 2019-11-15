@@ -11,6 +11,15 @@
   <link href="css/normalize.css" rel="stylesheet" type="text/css">
   <link href="css/webflow.css" rel="stylesheet" type="text/css">
   <link href="css/wangs-first-project-256e08.webflow.css" rel="stylesheet" type="text/css">
+  <link href="lib/leaflet/leaflet.css" rel="stylesheet" />
+    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="lib/L.Control.ZoomDisplay.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/site.css" />
+    <link href="lib/leaflet.fullscreen.css" rel="stylesheet" />
+    <link href="lib/jquery-ui.css" rel="stylesheet" />
+    <link href="lib/L.Control.MousePosition.css" rel="stylesheet" />
+    <link rel=icon href=favicon.png sizes="any" type="image/png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.10/dist/css/bootstrap-select.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js" type="text/javascript"></script>
   <script type="text/javascript">WebFont.load({  google: {    families: ["Montserrat:100,100italic,200,200italic,300,300italic,400,400italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic","Lato:100,100italic,300,300italic,400,400italic,700,700italic,900,900italic"]  }});</script>
   <!-- [if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js" type="text/javascript"></script><![endif] -->
@@ -26,11 +35,204 @@
         <div class="menu-button w-nav-button"><img src="images/menu-icon_1menu-icon.png" width="22" alt="" class="menu-icon"></div>
       </div>
     </div>
-  </div> 
+  </div>
   <div class="section-4">
     <div class="w-container">
       <h1 data-w-id="ecbd41cd-5b2d-78be-ec94-d855601f6275" style="-webkit-transform:translate3d(0, 22PX, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 22PX, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 22PX, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 22PX, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="heading">DATA</h1>
-      <div data-w-id="ecbd41cd-5b2d-78be-ec94-d855601f6277" style="-webkit-transform:translate3d(0, 22PX, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 22PX, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 22PX, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 22PX, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="paragraph-bigger cc-bigger-light">Coming Soon...!</div>
+      <div data-w-id="ecbd41cd-5b2d-78be-ec94-d855601f6277" style="-webkit-transform:translate3d(0, 22PX, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 22PX, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 22PX, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 22PX, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="paragraph-bigger cc-bigger-light">
+	  
+	  <div class="description">
+		<p>This page allow you download the‘HydroClim’ datasets, providing monthly streamflow and water temperature predictions for stream sections in all major watersheds across the United States from 1950-2099.You can also check our data visualization map <a href="map.html">here</a></p></div>
+<form id="submitform">
+  <div class="panel-group" id="accordion">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+          #1. Date and Basin Selection
+        </a>
+      </h4>
+    </div>
+      <div id="hydroclim-result1"><div id="date-result"></div><h5 class="warning" id="warning-date-r">--! Start date should be before end date!</h5> <div id="basin-result"></div><h5 class="warning" id="warning-basin-r">--! You have to select at least one basin!</h5></div>
+    <div id="collapseOne" class="panel-collapse collapse in">
+      <div class="panel-body">
+           <div class="hydroclim-data-collapse" id="first-part">
+                <!-- Data Selection -->
+            <div>
+                <h3>Date Selection</h3> <h3 class="warning" id="warning-date">--! Start date should be before end date!</h3>
+                <div class="hydroclim-date-panel" id="hydroclim-date-panel-subset" >
+                    <div style="display:inline-block">
+                        <h5>
+							<input id="timesub" type="radio" name="hydroclim-date" checked/> Subset:
+							<input id="timefull" type="radio" name="hydroclim-date" />  Full:
+						 </h5>
+                        <div class="hydroclim-data-options-start-selector">
+                            <label class="hydroclim-data-options-label" for="hydroclim-data-date-selector">Month Selection</label>
+                             <label class="dropdown-label">From:&nbsp;</label>
+                            <select class="selectpicker date-selection"  id="monthstart" name="monthstart"></select>
+
+                             <label class="dropdown-label">To:&nbsp;</label>
+                                        <select class="selectpicker date-selection"  id="monthend" name="monthend"></select>
+
+                            <!--<div>
+                                <label class="hydroclim-data-options-label" for="hydroclim-data-date-selector">Month Selection</label>
+                                <div id="hydroclim-data-month-date-selector">
+                                    <div class="date-selection-option" id="month-start-selection-picker">
+                                        <label class="dropdown-label">From:&nbsp;</label>
+                                        <select class="selectpicker" id="monthstart" name="monthstart"></select>
+                                    </div>
+                                    <div class="date-selection-option" id="month-end-selection-picker">
+                                        <label class="dropdown-label">To:&nbsp;</label>
+                                        <select class="selectpicker" id="monthend" name="monthend"></select>
+                                    </div>
+                                </div>
+                            </div>-->
+                        </div>
+
+                        <div class="hydroclim-data-options-end-selector">
+                            <div>
+                                <label class="hydroclim-data-options-label" for="hydroclim-data-date-selector">Year Selection</label>
+                                 <label class="dropdown-label">From:&nbsp;</label>
+                                        <select class="selectpicker date-selection" id="yearstart" name="yearstart"></select>
+                                 <label class="dropdown-label">To:&nbsp;</label>
+                                        <select class="selectpicker date-selection" id="yearend" name="yearend"></select>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--<div style="display:inline-block">
+                        <div class="hydroclim-date-panel" id="hydroclim-date-panel-from-to">
+                            <label class="hydroclim-data-options-label" for="hydroclim-data-date-selector">Starting Date Selection</label>
+                                    <label class="dropdown-label">Month:&nbsp;</label>
+                                            <select id="fullmonthstart" name="monthstart" class="selectpicker"></select>
+                             <label class="dropdown-label">Year&nbsp;</label>
+                                            <select id="fullyearstart" name="yearstart" class="selectpicker"></select>
+                            <label class="hydroclim-data-options-label" for="hydroclim-data-date-selector">Ending Date Selection</label>
+
+                                            <label class="dropdown-label">Month:&nbsp;</label>
+                                            <select id="fullmonthend" name="monthend" class="selectpicker"></select>
+
+                                            <label class="dropdown-label">Year&nbsp;</label>
+                                            <select id="fullyearend" name="yearend" class="selectpicker"></select>
+
+                    </div>
+                </div>-->
+            </div>
+            <!-- Basin Selection -->
+            <div>
+                <h3>Basin Selection</h3> <h3 class="warning" id="warning-basin">--! You have to select at least one basin!</h3>
+                <select form="submitform" name="basin_id" id="basin-data" data-width="auto" class="selectpicker" multiple data-actions-box="true" multiple title="Choose one or more basins of the following...">
+                </select>
+                <!--<table id="basin-data" border='1'>
+                    <tr>
+                        <th>Select</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                    </tr>
+                </table>-->
+            </div>
+            </div>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+          #2. Model Selection
+        </a>
+      </h4>
+    </div>
+       <div id="hydroclim-result2"> <div id="model-result"></div><h5 class="warning" id="warning-model-r">--! you have to select observed data or at least ond RCP model data option</h5> <div id="rcp-result"></div><h5 class="warning" id="warning-rcp-r">--! You have to at least ond RCP model data option!</h5> </div>
+    <div id="collapseTwo" class="panel-collapse collapse">
+      <div class="panel-body">
+          <!-- Data Type selection: Observed, RCP4.5, RCP 8.5-->
+            <div>
+                <h3>No-model</h3> <h3 class="warning" id="warning-model">--! you have to select observed data or at least ond RCP model data option</h3>
+                <div class="col-md-12">
+					<h5><input id='obs-r' name="isobserved" type="checkbox" /> Observerd Data (1950 - 1999)</h5>
+				</div>
+                <!--<table id="historical-data" border='1'>
+                    <tr>
+                        <th>Select</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Country</th>
+                    </tr>
+                    <tr>
+                        <td style="padding: 1px;">
+                            <input type="checkbox" />
+                        </td>
+                        <td style="padding: 1px;">
+                            Historical
+                        </td>
+                        <td style="padding: 1px;">
+                            1950-1999
+                        </td>
+                        <td style="padding: 1px;">
+                            --
+                        </td>
+                    </tr>
+                </table>-->
+            </div>
+          <div>
+               <h3>RCP </h3>
+            <div class="col-md-6">
+
+                <h5><input id="45-r" type="checkbox" name="hydroclim-rcp-models"/>RCP 4.5 (1950 - 2099)</h5>
+                    <select disabled id="45-data" class="selectpicker"  multiple data-actions-box="true" multiple title="Choose one or more models of the following...">
+
+                    </select>
+
+            </div>
+            <div class="col-md-6">
+                <h5><input id="85-r" type="checkbox" name="hydroclim-rcp-models"/>RCP 8.5 (1950 - 2099)</h5>
+                 <select disabled id="85-data" class="selectpicker"  multiple data-actions-box="true" multiple title="Choose one or more models of the following...">
+
+                    </select>
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+         #3. Statistics
+        </a>
+      </h4>
+    </div>
+       <div id="hydroclim-result3"></div>
+    <div id="collapseThree" class="panel-collapse collapse">
+      <div class="panel-body">
+          <h5><input type="checkbox" name="hydroclim-stasticis" id="hydroclim-stast-orig"/>Temperature and Discharge raw data</h5>
+
+         <h5>  <input type="checkbox" name="hydroclim-stasticis" id="hydroclim-stast"/>  Statistics of Temperature and Discharge data</h5>
+                <span><div id="stast-group" class="col-md-6">
+                <h6><input id="avg" type="checkbox" name="hydroclim-stas" disabled value="Average "/ > Average</h6>
+                <h6><input id="max" type="checkbox" name="hydroclim-stas" disabled value="Max "/> Max </h6>
+                <h6><input id="min" type="checkbox" name="hydroclim-stas" disabled value="Min "/> Min </h6>
+                <h6><input id="sd" type="checkbox" name="hydroclim-stas" disabled  value="Standard Deviation "/> Standard Deviation </h6>
+                <h6><input id="va" type="checkbox" name="hydroclim-stas" disabled value="Variance "/> Variance </h6>
+                </div></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+      <div class="row">
+        <div class="col-md-2 col-xs-2 col1 center-block">
+      <button type="submit" class="btn btn-success"> Download your data!</button>
+        </div>
+      </div>
+</form>
+        </div>
+	  <div id="loading">
+		<div id="loading_anim">The data is downloading, it will take a few minutes...</div></div>
+			
+	  </div>
     </div>
   </div>
   <div class="section-5-copy">
@@ -43,6 +245,14 @@
   </div>
   <script src="https://d1tdp7z6w94jbb.cloudfront.net/js/jquery-3.3.1.min.js" type="text/javascript" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
   <script src="js/webflow.js" type="text/javascript"></script>
+   <script src="lib/jquery-3.2.1.min.js"></script>
+    <script src="lib/jquery-ui.js"></script>
+    <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+    <script src="js/data.js"></script>    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.10/dist/js/bootstrap-select.min.js"></script>
+    <script type="module" src="http://spin.js.org/spin.js"></script>
+	<script src="js/validation.js"></script>
+    <script src="js/downloads.js"></script>
   <!-- [if lte IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script><![endif] -->
 </body>
 </html>

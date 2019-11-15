@@ -84,7 +84,7 @@ function initMap() {
         }
     );
 	
-	var basin = new L.GeoJSON.AJAX("http://127.0.0.1:5000/v1/basin/basin",{
+	/*var basin = new L.GeoJSON.AJAX("http://127.0.0.1:5000/v1/basin/basin",{
 					style:function(feature){
 						return {color: "brown"}
 					},
@@ -95,10 +95,10 @@ function initMap() {
 							}
 						layer.bindPopup('<table>' + html_prop + '</table>');
 						}
-					});
+					});*/
     basin.imageSrc = "Basin.PNG";
 	
-	var reaches = new L.GeoJSON.AJAX("http://127.0.0.1:5000/v1/reach/reach",{
+	/*var reaches = new L.GeoJSON.AJAX("http://127.0.0.1:5000/v1/reach/reach",{
 					onEachFeature: function (feature, layer) {
 						var html_prop ="";
 						for(var prop in feature.properties){
@@ -106,7 +106,7 @@ function initMap() {
 							}
 						layer.bindPopup('<table>' + html_prop + '</table>');
 						}
-					});
+					});*/
     reaches.imageSrc = "Reach.PNG";
 
     /////Google Satellite layer
@@ -196,7 +196,7 @@ function initMap() {
         'Basin': basin,
         //'Sub-basin': subbasin,
 		'Reaches': reaches
-        'Hydroclim': hydroclim,
+        //'Hydroclim': hydroclim,
     }
 
 	/////Add Legend on Map
@@ -371,6 +371,7 @@ function initMap() {
     //////////////////////////
     /////On change functions for Month, Year, Style selectors
     //////////////////////////
+	function dateValidation(){
 		var monthstart = hydroclimMonthStart
 		var monthend =  hydroclimMonthEnd
 		var yearstart = hydroclimYearStart
@@ -395,49 +396,49 @@ function initMap() {
         hydroclimYearStart = this.value;
         defaultsChanged = true;
         //updateHydroclimLayer(hydroclimMonth, hydroclimYear, selectedStyle);
-        updateAggregateHydroclimLayer(hydroclimMonthStart, hydroclimMonthEnd, hydroclimYearStart, hydroclimYearEnd, selectedStyle,modeltype);
+        //updateAggregateHydroclimLayer(hydroclimMonthStart, hydroclimMonthEnd, hydroclimYearStart, hydroclimYearEnd, selectedStyle,modeltype);
     });
     $("#monthend").change(function () {
         //map.removeLayer(hydroclim);
         hydroclimMonthEnd = this.value;
         defaultsChanged = true;
         //updateHydroclimLayer(hydroclimMonth, hydroclimYear, selectedStyle);
-        updateAggregateHydroclimLayer(hydroclimMonthStart, hydroclimMonthEnd, hydroclimYearStart, hydroclimYearEnd, selectedStyle,modeltype);
+        //updateAggregateHydroclimLayer(hydroclimMonthStart, hydroclimMonthEnd, hydroclimYearStart, hydroclimYearEnd, selectedStyle,modeltype);
     });
     $("#yearend").change(function () {
         //map.removeLayer(hydroclim);
         hydroclimYearEnd = this.value;
         defaultsChanged = true;
         //updateHydroclimLayer(hydroclimMonth, hydroclimYear, selectedStyle);
-        updateAggregateHydroclimLayer(hydroclimMonthStart, hydroclimMonthEnd, hydroclimYearStart, hydroclimYearEnd, selectedStyle,modeltype);
+        //updateAggregateHydroclimLayer(hydroclimMonthStart, hydroclimMonthEnd, hydroclimYearStart, hydroclimYearEnd, selectedStyle,modeltype);
     });
     $("#fullmonthstart").change(function () {
         //map.removeLayer(hydroclim);
         hydroclimMonthStart = this.value;
         defaultsChanged = true;
         //updateHydroclimLayer(hydroclimMonth, hydroclimYear, selectedStyle);
-        updateAggregateHydroclimLayer(hydroclimMonthStart, hydroclimMonthEnd, hydroclimYearStart, hydroclimYearEnd, selectedStyle,modeltype);
+        //updateAggregateHydroclimLayer(hydroclimMonthStart, hydroclimMonthEnd, hydroclimYearStart, hydroclimYearEnd, selectedStyle,modeltype);
     });
     $("#fullyearstart").change(function () {
         //map.removeLayer(hydroclim);
         hydroclimYearStart = this.value;
         defaultsChanged = true;
         //updateHydroclimLayer(hydroclimMonth, hydroclimYear, selectedStyle);
-        updateAggregateHydroclimLayer(hydroclimMonthStart, hydroclimMonthEnd, hydroclimYearStart, hydroclimYearEnd, selectedStyle,modeltype);
+        //updateAggregateHydroclimLayer(hydroclimMonthStart, hydroclimMonthEnd, hydroclimYearStart, hydroclimYearEnd, selectedStyle,modeltype);
     });
     $("#fullmonthend").change(function () {
         //map.removeLayer(hydroclim);
         hydroclimMonthEnd = this.value;
         defaultsChanged = true;
         //updateHydroclimLayer(hydroclimMonth, hydroclimYear, selectedStyle);
-        updateAggregateHydroclimLayer(hydroclimMonthStart, hydroclimMonthEnd, hydroclimYearStart, hydroclimYearEnd, selectedStyle,modeltype);
+        //updateAggregateHydroclimLayer(hydroclimMonthStart, hydroclimMonthEnd, hydroclimYearStart, hydroclimYearEnd, selectedStyle,modeltype);
     });
     $("#fullyearend").change(function () {
         //map.removeLayer(hydroclim);
         hydroclimYearEnd = this.value;
         defaultsChanged = true;
         //updateHydroclimLayer(hydroclimMonth, hydroclimYear, selectedStyle);
-        updateAggregateHydroclimLayer(hydroclimMonthStart, hydroclimMonthEnd, hydroclimYearStart, hydroclimYearEnd, selectedStyle,modeltype);
+        //updateAggregateHydroclimLayer(hydroclimMonthStart, hydroclimMonthEnd, hydroclimYearStart, hydroclimYearEnd, selectedStyle,modeltype);
     });
     $("#style").change(function () {
         //map.removeLayer(hydroclim);
@@ -451,7 +452,7 @@ function initMap() {
         modeltype = this.value;
         defaultsChanged = true;
         //updateHydroclimLayer(hydroclimMonth, hydroclimYear, selectedStyle);
-        updateAggregateHydroclimLayer(hydroclimMonthStart, hydroclimMonthEnd, hydroclimYearStart, hydroclimYearEnd, selectedStyle,modeltype);
+        //updateAggregateHydroclimLayer(hydroclimMonthStart, hydroclimMonthEnd, hydroclimYearStart, hydroclimYearEnd, selectedStyle,modeltype);
     });
     $("#hydroclim-data").change(function () {
         //map.removeLayer(hydroclim);
@@ -479,7 +480,12 @@ function initMap() {
 		}
 			//hydroclim.setStyle({color :'blue'}) 
     });
-	
+	$("#hydroclim-data-submit").click(function () {
+        //map.removeLayer(hydroclim);
+            updateAggregateHydroclimLayer(hydroclimMonthStart, hydroclimMonthEnd, hydroclimYearStart, hydroclimYearEnd, selectedStyle,modeltype);
+        defaultsChanged = true;
+
+    });
 	
 	$("#temp").change(function () {
         //map.removeLayer(hydroclim);
@@ -662,6 +668,15 @@ function initMap() {
 						for(var prop in feature.properties){
 								html_prop = html_prop + '<tr><td>'+prop+'</td><td>'+feature.properties[prop]+'</td></tr>'
 							}
+						html_prop += " <tr><td colspan=2> you can download the hydroclim data in "+ feature.properties.basin_name +":</td></tr>"
+						var rcp_para = 'isobserved=on&isRCP45=off&isRCP85=off&rcp45=&rcp85='
+						if(0<modeltype<20) rcp_para = 'isobserved=off&isRCP45=on&isRCP85=off&rcp45='+ modeltype +'&rcp85='
+						if(modeltype>=20) rcp_para = 'isobserved=off&isRCP45=off&isRCP85=on&rcp85='+ modeltype +'&rcp45='
+						var viewparams = [
+											'timerangetype=' + timerangetype, 'monthstart=' + hydroclimMonthStart, 'monthend=' + hydroclimMonthEnd, 'yearstart=' + hydroclimYearStart, 'yearend=' + hydroclimYearEnd, 'basinids=' + feature.properties.basin_id , 'model_id='+modeltype, rcp_para,'israwdata=false','isstastics=true','isavg=true','ismax=false','ismin=false','isSD=false','isVa=false'
+										]
+						html_prop += " <tr><td colspan=2><a href='"+ api_url +"/v1/records/reachdatazip?" + viewparams.join("&") + "'>download</a></td></tr>"
+						
 						layer.bindPopup('<table>' + html_prop + '</table>');
 						}
 					}).addTo(map);

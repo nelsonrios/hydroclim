@@ -55,7 +55,7 @@ var modelsList85 = [
     { name: 'noresm1-m.1', id: 39, description: 'Norwegian Climate Centre', country: 'Norway' }
 ];
 
-var basins = [ 
+var basins = [
     { name: ' Apalachicola River Basin', id: 1 },
     { name: ' Arkansas-White-Red River Basin', id: 2 },
     { name: ' Brazos River Basin', id: 3 },

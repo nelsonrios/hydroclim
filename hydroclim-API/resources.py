@@ -259,16 +259,18 @@ class getReachData(Resource):
         json = jsonify({"type": "FeatureCollection", "features": data})
         return json
 
-
-class ReachDataResource(Resource):
+class getAllReachData(Resource):
     """
     Return csv of reaches temp&flow information
-    @url: /reachdata
+    @url: /getallreachdata
     @method: GET
-    @return: csv of temp&flow information
-    @return-type: csv
+    @return: geojson of all basin avg temp&flow information
+    @return-type: geojson
     @raise keyError: raises an exception
     """
+    parser.add_argument('timerangetype', type=int)
+    parser.add_argument('model_id', type=int)
+    parser.add_argument('isobserved', type=str)
 
     def get(self):
         args = parser.parse_args()
@@ -276,34 +278,91 @@ class ReachDataResource(Resource):
         yearend = args['yearend']
         monthstart = args['monthstart']
         monthend = args['monthend']
-        basinid = args['basin_id']
-        model_id = 0 if args['model_id'] == 0 else args['model_id']
-        isobserved = True if args['isobserved'] == 'off' else False
-        # israw = args['israw'] # if no, output statics result
-        # recoreds = session.query(ReachData,RecordDateData).join( RecordDateData,ReachData.record_month_year_id == RecordDateData.id).\
-        recoreds = session.query(functions.ST_Transform(Reach.geom, 4326), Reach.OBJECTID, Reach.ARCID,
-                                 Reach.Shape_Leng,
-                                 ReachData, RecordDateData).join(ReachData, Reach.id == ReachData.rch).join(
-            RecordDateData, ReachData.record_month_year_id == RecordDateData.id). \
-            filter(RecordDateData.year >= yearstart). \
-            filter(RecordDateData.year <= yearend). \
-            filter(RecordDateData.month >= monthstart). \
-            filter(RecordDateData.month <= monthend). \
-            filter(ReachData.basin_id == basinid). \
-            filter(ReachData.model_id == model_id).all()
-        # filter(ReachData.is_observed == isobserved).all()
+        basin_id = args['basin_id']
+        basinids = "1_3".split("_")
+        model_id = args['model_id']
+        timerangetype = 'subset' if args['timerangetype'] == 1 else 'full'  ## subset:1, full:2
+        # isobserved = True if args['isobserved'] == 'off' else False
+        smapping = geo.mapping
+        # reaches = session.query(functions.ST_Transform(Reach.geom, 4326), Reach.OBJECTID, Reach.ARCID, Reach.Shape_Leng,
+        #                         ReachData, RecordDateData).join(ReachData, Reach.id == ReachData.rch).join(
+        #     RecordDateData, ReachData.record_month_year_id == RecordDateData.id). \
+        #     filter(RecordDateData.year >= yearstart). \
+        #     filter(RecordDateData.year <= yearend). \
+        #     filter(RecordDateData.month >= monthstart). \
+        #     filter(RecordDateData.month <= monthend). \
+        #     filter(ReachData.basin_id == basinid). \
+        #     filter(ReachData.model_id == model_id).all();
+        #     subquery 1: inner join RecordDate and ReachData by reach id; filter data by time, model, basin etc.
+        alldata=[]
+        for basinid in basinids :
+            if timerangetype == 'subset':
+                subq1 = (
+                    session.query(ReachData).join(RecordDateData,
+                                                  ReachData.record_month_year_id == RecordDateData.id).filter(
+                        RecordDateData.year >= yearstart). \
+                        filter(RecordDateData.year <= yearend). \
+                        filter(RecordDateData.month >= monthstart). \
+                        filter(RecordDateData.month <= monthend). \
+                        filter(ReachData.basin_id == basinid). \
+                        filter(ReachData.model_id == model_id)).subquery()
+            else:
+                subq1 = (
+                    session.query(ReachData).join(RecordDateData, ReachData.record_month_year_id == RecordDateData.id). \
+                        filter(
+                        ((RecordDateData.year == yearstart) & (RecordDateData.month >= monthstart)).self_group() | (
+                                (RecordDateData.year == yearend) & (RecordDateData.month <= monthend)).self_group() | (
+                                (RecordDateData.year > yearstart) & (RecordDateData.year < yearend)).self_group()). \
+                        filter(ReachData.basin_id == basinid). \
+                        filter(ReachData.model_id == model_id)).subquery()
+            #    subquery 2: get all statisc value of temp and flow
+            subq = (session.query(
+                subq1.c.rch,
+                func.avg(subq1.c.flow_outcms).label("avg_flow_outcms"),
+                func.avg(subq1.c.wtmpdegc).label("avg_wtmpdegc"))
+                    .group_by(subq1.c.rch)).subquery()
+            #   main query: inner join subquery 2 and reach by reach id; filter by basin id
+            reaches = session.query(subq.c.avg_wtmpdegc, subq.c.avg_flow_outcms, Reach.OBJECTID.label("reachid"),
+                                functions.ST_Transform(Reach.geom, 4326), Reach.ARCID.label("ARCID"), Reach.GRID_CODE,
+                                Reach.FROM_NODE,
+                                Reach.TO_NODE, Reach.AreaC, Reach.Len2, Reach.Slo2, Reach.Wid2, Reach.Dep2, Reach.MinEl,
+                                Reach.MaxEl, Reach.Shape_Leng, Reach.HydroID, Reach.OutletID, Reach.basin_id).join(subq,
+                                                                                                   Reach.OBJECTID == subq.c.rch).filter(
+                Reach.basin_id == basinid).all()
+            # filter(RecordDateData.year == 1950).filter(RecordDateData.month == 1).all()
+            data = [{"type": "Feature",
+                     "properties": {"OBJECTID": reach.reachid,
+                                    "ARCID": reach.ARCID,
+                                    # "GRID_CODE": reach.GRID_CODE,
+                                    # "AreaC": reach.AreaC,
+                                    # "Dep2": reach.Dep2,
+                                    # "FROM_NODE": reach.FROM_NODE,
+                                    # "TO_NODE": reach.TO_NODE,
+                                    # "HydroID": reach.HydroID,
+                                    # "Len2": reach.Len2,
+                                    # "MaxEl": reach.MaxEl,
+                                    # "Len2": reach.Len2,
+                                    # "MinEl": reach.MinEl,
+                                    # "OutletID": reach.OutletID,
+                                    "Shape_Leng": reach.Shape_Leng,
+                                    # "Slo2": reach.Slo2,
+                                    # "Subbasin": reach.Subbasin,
+                                    # "SubbasinR": reach.SubbasinR,
+                                    # "Wid2": reach.Wid2,
+                                    "basin_id": reach.basin_id,
+                                    "basin_name":basinlist[str(basinid)],
+                                    "temp": reach.avg_wtmpdegc,
+                                    "discharge": reach.avg_flow_outcms
+                                    },
+                     "geometry": {"type": "LineString",
+                                  "coordinates": smapping(to_shape(reach[3]))["coordinates"]
+                                  },
+                     } for reach in reaches]
+            alldata.extend(data)
+        json = jsonify({"type": "FeatureCollection", "features": alldata})
+        return json
 
-        csv = 'Id,rch,flow_outcms,wtmpdegc,year,month\n'
-        for record in recoreds:
-            recstring = str(record.ReachData.Id) + ',' + str(record.ReachData.rch) + ',' + str(
-                record.ReachData.flow_outcms) + ',' + str(record.ReachData.wtmpdegc) + ',' + str(
-                record.RecordDateData.year) + ',' + str(record.RecordDateData.month) + '\n'
-            csv += recstring
-        return Response(
-            csv,
-            mimetype="text/csv",
-            headers={"Content-disposition":
-                         "attachment; filename=myplot.csv"})
+
 
 
 class ReachDataZip(Resource):
@@ -340,7 +399,7 @@ class ReachDataZip(Resource):
         yearend = args['yearend']
         monthstart = args['monthstart']
         monthend = args['monthend']
-        timerangetype = 'subset' if args['timerangetype'] == '1' else 'full'  ## subset:1, full:2
+        timerangetype = 'subset' if args['timerangetype'] == 1 else 'full'  ## subset:1, full:2
 
         # basin range
         basinstr = args['basinids']
@@ -532,21 +591,22 @@ def fetchRawData(yearstart, yearend, monthstart, monthend, timerangerype, basini
     #                                                         ReachData.record_month_year_id == RecordDateData.id). \
 
     if timerangerype == "subset":
-        recoreds = session.query(functions.ST_Transform(Reach.geom, 4326), Reach.OBJECTID, Reach.ARCID,
+        recoreds = session.query(functions.ST_AsText(Reach.geom, 4326), Reach.OBJECTID, Reach.ARCID,
                                  Reach.Shape_Leng, Reach.AreaC, Reach.GRID_CODE, Reach.FROM_NODE, Reach.TO_NODE,
                                  Reach.Len2, Reach.Slo2, Reach.Wid2, Reach.Dep2, Reach.MinEl,
                                  Reach.MaxEl, Reach.HydroID, Reach.OutletID,
-                                 ReachData, RecordDateData).join(ReachData,
-                                                                 Reach.id == ReachData.rch).join(
+                                 ReachData, Reach).\
+            join(ReachData,Reach.OBJECTID == ReachData.rch).join(
             RecordDateData, ReachData.record_month_year_id == RecordDateData.id). \
-            filter(RecordDateData.year >= yearstart). \
+            filter(Reach.basin_id == basinid).\
+        filter(RecordDateData.year >= yearstart). \
             filter(RecordDateData.year <= yearend). \
             filter(RecordDateData.month >= monthstart). \
             filter(RecordDateData.month <= monthend). \
             filter(ReachData.basin_id == basinid). \
             filter(ReachData.model_id == model_t_id).all()
     else:
-        recoreds = session.query(functions.ST_Transform(Reach.geom, 4326), Reach.OBJECTID, Reach.ARCID,
+        recoreds = session.query(functions.ST_AsText(Reach.geom, 4326), Reach.OBJECTID, Reach.ARCID,
                                  Reach.Shape_Leng, Reach.AreaC, Reach.GRID_CODE, Reach.FROM_NODE, Reach.TO_NODE,
                                  Reach.Len2, Reach.Slo2, Reach.Wid2, Reach.Dep2, Reach.MinEl,
                                  Reach.MaxEl, Reach.HydroID, Reach.OutletID,
@@ -561,11 +621,11 @@ def fetchRawData(yearstart, yearend, monthstart, monthend, timerangerype, basini
     observed_raw_csv = 'wtmpdegc,flow_outcms, reachid,geom,ARCID,GRID_CODE,FROM_NODE,TO_NODE,AreaC,Len2,Slo2,Wid2,Dep2,MinEl,MaxEl,Shape_Leng,HydroID,OutletID \n'
     for record in recoreds:
         recstring = str(record.ReachData.wtmpdegc) + ',' + str(record.ReachData.flow_outcms) + ',' + str(
-            record.ReachData.rch) + ',' + str(record[0]) + str(record.ARCID) + str(record.GRID_CODE) + str(
-            record.AreaC) + str(record.FROM_NODE) + str(record.TO_NODE) + str(record.AreaC) + str(record.Len2) + str(
-            record.Slo2) + \
-                    str(record.Wid2) + str(record.Dep2) + str(record.MinEl) + str(record.MaxEl) + str(
-            record.Shape_Leng) + str(record.HydroID) + str(record.OutletID) + '\n'
+            record.ReachData.rch) + ',' + str(record[0]) + ',' +str(record.ARCID) + ',' +str(record.GRID_CODE)+ ',' + str(
+            record.AreaC)+ ',' + str(record.FROM_NODE)+ ',' + str(record.TO_NODE)+ ',' + str(record.AreaC)+ ',' + str(record.Len2)+ ',' + str(
+            record.Slo2) + ',' + \
+                    str(record.Wid2)+ ',' + str(record.Dep2)+ ',' + str(record.MinEl)+ ',' + str(record.MaxEl)+ ',' + str(
+            record.Shape_Leng)+ ',' + str(record.HydroID)+ ',' + str(record.OutletID) + '\n'
         observed_raw_csv += recstring
     return observed_raw_csv
 
@@ -639,11 +699,64 @@ def fetchStasticsData(yearstart, yearend, monthstart, monthend, timerangetype, b
         recstring += (str(record.min_wtmpdegc) + ',' + str(record.min_flow_outcms) + ',') if isMIN else ''
         recstring += (str(record.std_wtmpdegc) + ',' + str(record.std_flow_outcms) + ',') if isSD else ''
         recstring += (str(record.var_wtmpdegc) + ',' + str(record.var_flow_outcms) + ',') if isVar else ''
-        recstring += str(record.reachid) + str(record[11]) + str(record.ARCID) + str(record.GRID_CODE) + str(
-            record.AreaC) + str(record.FROM_NODE) + str(record.TO_NODE) + str(record.AreaC) + str(record.Len2) + str(
-            record.Slo2) + \
-                     str(record.Wid2) + str(record.Dep2) + str(record.MinEl) + str(record.MaxEl) + str(
-            record.Shape_Leng) + str(record.HydroID) + str(record.OutletID) + '\n'
+        recstring += str(record.reachid)+ ',' + str(record[11])+ ',' + str(record.ARCID)+ ',' + str(record.GRID_CODE)+ ',' + str(
+            record.AreaC)+ ',' + str(record.FROM_NODE)+ ',' + str(record.TO_NODE)+ ',' + str(record.AreaC)+ ',' + str(record.Len2)+ ',' + str(
+            record.Slo2)+ ',' + \
+                     str(record.Wid2)+ ',' + str(record.Dep2) + ',' + str(record.MinEl)+ ',' + str(record.MaxEl)+ ',' + str(
+            record.Shape_Leng)+ ',' + str(record.HydroID) + ',' + str(record.OutletID) + '\n'
         csv += recstring
 
     return csv
+
+class ReachDataResource(Resource):
+    """
+    Return csv of reaches temp&flow information
+    @url: /reachdata
+    @method: GET
+    @return: csv of temp&flow information
+    @return-type: csv
+    @raise keyError: raises an exception
+    """
+    parser.add_argument('timerangetype', type=int)
+    parser.add_argument('model_id', type=int)
+    parser.add_argument('isobserved', type=str)
+    parser.add_argument('isRCP45', type=str)
+    parser.add_argument('isRCP85', type=str)
+    parser.add_argument('rcp45', type=str)
+    parser.add_argument('rcp85', type=str)
+
+    def get(self):
+        args = parser.parse_args()
+        basinid = args['basin_id']
+        yearstart = args['yearstart']
+        yearend = args['yearend']
+        monthstart = args['monthstart']
+        monthend = args['monthend']
+        timerangetype = args['timerangetype']
+        model_id = 0 if args['model_id'] == 0 else args['model_id']
+        isobserved = True if args['isobserved'] == 'off' else False
+        # israw = args['israw'] # if no, output statics result
+        # recoreds = session.query(ReachData,RecordDateData).join( RecordDateData,ReachData.record_month_year_id == RecordDateData.id).\
+        recoreds = session.query(functions.ST_Transform(Reach.geom, 4326), Reach.OBJECTID, Reach.ARCID,
+                                 Reach.Shape_Leng,
+                                 ReachData, RecordDateData).join(ReachData, Reach.id == ReachData.rch).join(
+            RecordDateData, ReachData.record_month_year_id == RecordDateData.id). \
+            filter(RecordDateData.year >= yearstart). \
+            filter(RecordDateData.year <= yearend). \
+            filter(RecordDateData.month >= monthstart). \
+            filter(RecordDateData.month <= monthend). \
+            filter(ReachData.basin_id == basinid). \
+            filter(ReachData.model_id == model_id).all()
+        # filter(ReachData.is_observed == isobserved).all()
+
+        csv = 'Id,rch,flow_outcms,wtmpdegc,year,month\n'
+        for record in recoreds:
+            recstring = str(record.ReachData.Id) + ',' + str(record.ReachData.rch) + ',' + str(
+                record.ReachData.flow_outcms) + ',' + str(record.ReachData.wtmpdegc) + ',' + str(
+                record.RecordDateData.year) + ',' + str(record.RecordDateData.month) + '\n'
+            csv += recstring
+        return Response(
+            csv,
+            mimetype="text/csv",
+            headers={"Content-disposition":
+                         "attachment; filename=myplot.csv"})
