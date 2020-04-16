@@ -1,7 +1,7 @@
-from models import Basin_info, Basin, Reach, ReachData, RecordDateData
+from models import Basin_info, Basin, Reach, ReachData, RecordDateData, User
 
 from db import session
-from flask import jsonify, Response
+from flask import jsonify, Response, request, make_response
 from io import BytesIO
 import zipfile, time, config, os
 from resources_data import basinlist, rcp45list, rcp85list
@@ -9,11 +9,97 @@ from resources_data import basinlist, rcp45list, rcp85list
 from flask_restplus import reqparse, abort, Resource, fields, marshal_with
 from flask_restful import inputs
 from sqlalchemy import func, or_, and_
-# import geoalchemy2,shapely
+
 from shapely.geometry import geo
 from geoalchemy2 import functions
 from geoalchemy2.shape import to_shape
 
+import jwt, datetime
+from functools import wraps
+
+
+# ========== User ==================
+user_info_fields = {
+    'id': fields.Integer,
+    'public_id': fields.String,
+    'username': fields.String
+}
+"""
+    Decorator: User Auth Validation Before Getting Data from Database.
+    @method: GET
+    @return: User Lists
+    @return-type: JSON
+    @raise keyError: raises an exception
+    """
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = None
+
+        if 'x-access-token' in request.headers:
+            token = request.headers['x-access-token']
+
+        if not token:
+            #return Response(jsonify({'message': 'Token is missing!'}), status = 401, mimetype='application/json')
+            return make_response('Could not verify', 401)
+
+        try:
+            data = jwt.decode(token,'SECRET_KEY')
+            current_user = session.query(User).filter(User.public_id == data['public_id']).first()
+        except:
+            return jsonify({'message': 'Token is invalid!'}), 401
+        return f(current_user, *args, **kwargs)
+    return decorated
+
+class UserInfo(Resource):
+ """
+    Get Users information 
+    @url: /user
+    @method: GET 
+    @return: User Lists
+    @return-type: JSON
+    @raise keyError: raises an exception
+    """
+
+    @marshal_with(user_info_fields)
+    def get(self):
+        userinfo = session.query(User).all()
+        if not userinfo:
+            abort(404, message="There is no user existed")
+        return userinfo
+
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('public_id', type=str, location='form')
+        args = parser.parse_args()
+        print(args)
+
+class userLogin(Resource):
+ """
+    Get Users information 
+    @url: /login
+    @method: POST
+	@param: Basic Auth
+    @return: JWT
+    @return-type: JSON
+    @raise keyError: raises an exception
+    """
+
+    def post(self):
+        auth = request.authorization
+        if not auth or not auth.username or not auth.password:
+            return make_response('Could not verify', 401)
+        userinfo = session.query(User).filter(User.username == auth.username).first()
+
+        if not userinfo:
+            return make_response('Could not verify', 401)
+        if userinfo.password == auth.password:
+            token = jwt.encode({'public_id': userinfo.public_id,
+                                'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=30)},
+                                "SECRET_KEY")
+            return jsonify({'token' : token.decode('UTF-8')})
+        return make_response('Could not verify', 401)
+        
 # ==========Basin ==================
 basin_info_fields = {
     'id': fields.Integer,
@@ -32,14 +118,6 @@ basin_fields = {
 parser = reqparse.RequestParser()
 parser.add_argument('basininfo', type=str)
 
-
-# def returnBasinDict():
-#     basinlist = session.query(Basin_info).all()
-#     basinDict = {}
-#     for i in range(0, len(basinlist)):
-#         item = basinlist[i]
-#         basinDict[item.id] = item.name[0]
-#     return basinDict
 
 
 class BasininfoResource(Resource):
@@ -120,7 +198,7 @@ class BasinResource(Resource):
 parser.add_argument('X', type=float)
 parser.add_argument('Y', type=float)
 
-
+# ==========Reach ==================
 class ReachResource(Resource):
     """
      Return geojson of Reaches by location, if location is None, return all of the reaches features.
@@ -199,7 +277,7 @@ parser.add_argument('basin_id', type=int)
 parser.add_argument('isobserved', type=bool)
 parser.add_argument('model_id', type=int)
 
-
+# ==========Records ==================
 class getReachData(Resource):
     """
     Return csv of reaches temp&flow information
@@ -279,21 +357,14 @@ class getAllReachData(Resource):
         monthstart = args['monthstart']
         monthend = args['monthend']
         basin_id = args['basin_id']
-        basinids = "1_3".split("_")
+        #basinids = "1_2_3_4_5_6_7_8_9_10_11_12_14_16_17_18_19_20_21_22_23_24_25_26_27_28".split("_")
+        basinids = basin_id.split("_")
+	     #basinids = "1_2".split("_")
         model_id = args['model_id']
         timerangetype = 'subset' if args['timerangetype'] == 1 else 'full'  ## subset:1, full:2
         # isobserved = True if args['isobserved'] == 'off' else False
         smapping = geo.mapping
-        # reaches = session.query(functions.ST_Transform(Reach.geom, 4326), Reach.OBJECTID, Reach.ARCID, Reach.Shape_Leng,
-        #                         ReachData, RecordDateData).join(ReachData, Reach.id == ReachData.rch).join(
-        #     RecordDateData, ReachData.record_month_year_id == RecordDateData.id). \
-        #     filter(RecordDateData.year >= yearstart). \
-        #     filter(RecordDateData.year <= yearend). \
-        #     filter(RecordDateData.month >= monthstart). \
-        #     filter(RecordDateData.month <= monthend). \
-        #     filter(ReachData.basin_id == basinid). \
-        #     filter(ReachData.model_id == model_id).all();
-        #     subquery 1: inner join RecordDate and ReachData by reach id; filter data by time, model, basin etc.
+        # subquery 1: inner join RecordDate and ReachData by reach id; filter data by time, model, basin etc.
         alldata=[]
         for basinid in basinids :
             if timerangetype == 'subset':
@@ -446,24 +517,7 @@ class ReachDataZip(Resource):
                     model_t_id = 0
                     observed_raw_csv = fetchRawData(yearstart, yearend, monthend, monthend, timerangetype, basinid,
                                                     model_t_id)
-                    # recordeds = session.query(ReachData, RecordDateData).join(RecordDateData,
-                    #                                                          ReachData.record_month_year_id == RecordDateData.id). \
-                    #     recoreds = session.query(functions.ST_Transform(Reach.geom, 4326), Reach.OBJECTID, Reach.ARCID,
-                    #                              Reach.Shape_Leng,
-                    #                              ReachData, RecordDateData).join(ReachData,
-                    #                                                              Reach.id == ReachData.rch).join(
-                    #     RecordDateData, ReachData.record_month_year_id == RecordDateData.id). \
-                    #     filter(RecordDateData.year >= yearstart). \
-                    #     filter(RecordDateData.year <= yearend). \
-                    #     filter(RecordDateData.month >= monthstart). \
-                    #     filter(RecordDateData.month <= monthend). \
-                    #     filter(ReachData.basin_id == basinid). \
-                    #     filter(ReachData.model_id == 0).all()
-                    # observed_raw_csv = 'wtmpdegc,flow_outcms, reachid,geom,ARCID,GRID_CODE,FROM_NODE,TO_NODE,AreaC,Len2,Slo2,Wid2,Dep2,MinEl,MaxEl,Shape_Leng,HydroID,OutletID \n'
-                    # for record in recordeds:
-                    #     recstring = str(record.wtmpdegc) + ',' + str(record.flow_outcms) + ',' + str(
-                    #         record.reachid) + ',' + str(record.geom) + '\n'
-                    #     observed_raw_csv += recstring
+                    
                     #### add observed raw data to ZIP files
                     with zipfile.ZipFile(memory_file, 'a') as zf:
                         raw_obs_file_path = os.path.join('results', basinname,
@@ -529,61 +583,14 @@ class ReachDataZip(Resource):
                                       timerangetype, yearstart,
                                       yearend, monthstart, monthend)
 
-        # #     subquery 1: inner join RecordDate and ReachData by reach id; filter data by time, model, basin etc.
-        # subq1 = (session.query(ReachData).join(RecordDateData, ReachData.record_month_year_id == RecordDateData.id).filter(RecordDateData.year >=yearstart).\
-        #     filter(RecordDateData.year <=yearend).\
-        #     filter(RecordDateData.month >= monthstart).\
-        #     filter(RecordDateData.month <= monthend).\
-        #     filter(ReachData.basin_id == basinid).\
-        #     filter(ReachData.model_id.in_(model_ids))).subquery()
-        # #    subquery 2: get all statisc value of temp and flow
-        # subq = (session.query(
-        #         subq1.c.rch, func.max(subq1.c.flow_outcms).label("max_flow_outcms"),
-        #                             func.min(subq1.c.flow_outcms).label("min_flow_outcms"),
-        #                             func.avg(subq1.c.flow_outcms).label("avg_flow_outcms"),
-        #                             func.stddev(subq1.c.flow_outcms).label("std_flow_outcms"),
-        #                             func.variance(subq1.c.flow_outcms).label("var_flow_outcms"),
-        #                             func.max(subq1.c.wtmpdegc).label("max_wtmpdegc"),
-        #                             func.min(subq1.c.wtmpdegc).label("min_wtmpdegc"),
-        #                             func.avg(subq1.c.wtmpdegc).label("avg_wtmpdegc"),
-        #                             func.stddev(subq1.c.wtmpdegc).label("std_wtmpdegc"),
-        #                             func.variance(subq1.c.wtmpdegc).label("var_wtmpdegc"))
-        #     .group_by(subq1.c.rch)).subquery()
-        # #   main query: inner join subquery 2 and reach by reach id; filter by basin id
-        # qry = session.query( subq.c.avg_wtmpdegc, subq.c.max_wtmpdegc, subq.c.min_wtmpdegc, subq.c.std_wtmpdegc, subq.c.var_wtmpdegc, subq.c.avg_flow_outcms,subq.c.max_flow_outcms,subq.c.min_flow_outcms,subq.c.std_flow_outcms,subq.c.var_flow_outcms, Reach.OBJECTID.label("reachid"),functions.ST_AsText(Reach.geom),Reach.ARCID,Reach.GRID_CODE, Reach.FROM_NODE, Reach.TO_NODE, Reach.AreaC, Reach.Len2, Reach.Slo2, Reach.Wid2, Reach.Dep2 ,Reach.MinEl, Reach.MaxEl, Reach.Shape_Leng, Reach.HydroID, Reach.OutletID).join(subq, Reach.OBJECTID == subq.c.rch).filter(Reach.basin_id == basinid).all()
-        # #qry = (session.query(ReachData).join(RecordDateData, ReachData.record_month_year_id == RecordDateData.id))
-        #
-        # csv = 'avg_wtmpdegc,max_wtmpdegc,min_wtmpdegc,std_wtmpdegc,var_wtmpdegc,avg_flow_outcms,max_flow_outcms,min_flow_outcms,std_flow_outcms,var_flow_outcms, reachid,geom,ARCID,GRID_CODE,FROM_NODE,TO_NODE,AreaC,Len2,Slo2,Wid2,Dep2,MinEl,MaxEl,Shape_Leng,HydroID,OutletID \n'
-        # for record in qry:
-        #     recstring = str(record.avg_wtmpdegc) + ',' + str(record.max_wtmpdegc) + ',' + str(
-        #         record.min_wtmpdegc) + ',' + str(record.std_wtmpdegc) + ',' + str(
-        #         record.var_wtmpdegc) + ',' + str(record.avg_flow_outcms) + ',' + str(record.reachid) + ',' + '\n'
-        #     csv += recstring
-        #
-        # ## Create Zip Files
-        # memory_file = BytesIO()
-        # basinname =  basinlist[basinid]
-        # with zipfile.ZipFile(memory_file, 'w') as zf:
-        #     ### ShapeFiles: locate shape file path and add them to archive by .
-        #     shapefileSourcePath = os.path.join(config.SHAPEFILES_PATH, basinname, "Shape.zip").replace("\\","/");
-        #     arcnamePath = os.path.join(basinname, "Shape.zip").replace("\\","/")
-        #     zf.write(shapefileSourcePath, arcnamePath, zipfile.ZIP_DEFLATED)
-        #
-        #     ### Statistics File
-        #     statsFilePath = os.path.join(basinname, "Statistics_Observerd_" + basinname + "_" + str(yearstart) +"_" + str(yearstart) + "_" + str(monthstart) + "_" + str(monthend) + ".csv" ).replace("\\","/")
-        #     data = zipfile.ZipInfo(statsFilePath)
-        #     data.date_time = time.localtime(time.time())[:6]
-        #     data.compress_type = zipfile.ZIP_DEFLATED
-        #     zf.writestr(data, csv)
-        #
-        #     ### RawData File
+       
 
         memory_file.seek(0)
         return Response(
             memory_file,
             mimetype="application/zip",
             headers={"Content-disposition":
-                         "attachment; filename=zipfile.zip"})
+                         "attachment; filename=hydroclim_data.zip"})
 
 
 def fetchRawData(yearstart, yearend, monthstart, monthend, timerangerype, basinid, model_t_id):
@@ -591,7 +598,7 @@ def fetchRawData(yearstart, yearend, monthstart, monthend, timerangerype, basini
     #                                                         ReachData.record_month_year_id == RecordDateData.id). \
 
     if timerangerype == "subset":
-        recoreds = session.query(functions.ST_AsText(Reach.geom, 4326), Reach.OBJECTID, Reach.ARCID,
+        recoreds = session.query(functions.ST_AsText(Reach.geom), Reach.OBJECTID, Reach.ARCID,
                                  Reach.Shape_Leng, Reach.AreaC, Reach.GRID_CODE, Reach.FROM_NODE, Reach.TO_NODE,
                                  Reach.Len2, Reach.Slo2, Reach.Wid2, Reach.Dep2, Reach.MinEl,
                                  Reach.MaxEl, Reach.HydroID, Reach.OutletID,
@@ -606,7 +613,7 @@ def fetchRawData(yearstart, yearend, monthstart, monthend, timerangerype, basini
             filter(ReachData.basin_id == basinid). \
             filter(ReachData.model_id == model_t_id).all()
     else:
-        recoreds = session.query(functions.ST_AsText(Reach.geom, 4326), Reach.OBJECTID, Reach.ARCID,
+        recoreds = session.query(functions.ST_AsText(Reach.geom), Reach.OBJECTID, Reach.ARCID,
                                  Reach.Shape_Leng, Reach.AreaC, Reach.GRID_CODE, Reach.FROM_NODE, Reach.TO_NODE,
                                  Reach.Len2, Reach.Slo2, Reach.Wid2, Reach.Dep2, Reach.MinEl,
                                  Reach.MaxEl, Reach.HydroID, Reach.OutletID,
@@ -759,4 +766,4 @@ class ReachDataResource(Resource):
             csv,
             mimetype="text/csv",
             headers={"Content-disposition":
-                         "attachment; filename=myplot.csv"})
+                        "attachment; filename=myplot.csv"})

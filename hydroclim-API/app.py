@@ -22,24 +22,28 @@ from resources import ReachDataResource
 from resources import getReachData
 from resources import ReachDataZip
 from resources import getAllReachData
+from resources import UserInfo
+from resources import userLogin
 
 basin = Namespace("basin")
 
 reach = Namespace("reach")
 
 records = Namespace("records")
-
+#Basin NameSpace
 basin.add_resource(BasininfoResource,'/basininfo/<string:id>', endpoint = 'basininfo')
 basin.add_resource(BasinListResource,'/basinlist', endpoint = 'basinlists')
 basin.add_resource(BasinResource, "/basin", endpoint = 'basins')
 api.add_namespace(basin)
 
+#Reach NameSpace
 reach.add_resource(ReachResource, "/reach", endpoint = 'reaches')
 #reach.add_resource(ReachDataResource, "/reachdata", endpoint = 'records')
 
 #reach.add_resource(ReachGeoResource, "/reachbyloc/<int:x>/<int:y>", endpoint = 'reaches')
 api.add_namespace(reach)
 
+#Records NameSpace
 records.add_resource(ReachDataResource, "/reachdata", endpoint = 'records')
 records.add_resource(getReachData, "/getreachdata", endpoint = 'reachrecord')
 records.add_resource(getAllReachData, "/getallreachdata", endpoint = 'allreachrecord')
@@ -48,9 +52,12 @@ api.add_namespace(records)
 
 #Model NameSpace
 
-#Reach NameSpace
 
-#Subbasin NameSpace
+#User NameSpace
+user = Namespace("user")
+user.add_resource(UserInfo, "/user", endpoint = 'userinfolist')
+user.add_resource(userLogin, "/login", endpoint = 'userlogin')
+api.add_namespace(user)
 
 
 if __name__ == '__main__':

@@ -23,6 +23,7 @@ class TransformedGeometry(TypeDecorator):
     def bind_expression(self, bindvalue):
         return func.ST_Transform(self.impl.bind_expression(bindvalue), self.impl.srid)
 """
+
 class Basin_info(Base):
     __tablename__ = 'basin_info'
 
@@ -82,6 +83,19 @@ class RecordDateData(Base):
     id = Column(Integer,primary_key=True)
     month = Column(Integer)
     year = Column(Integer)
+
+class User(Base):
+    __tablename__ = 'User'
+
+    id = Column(Integer, primary_key=True)
+    public_id = Column(String(255))
+    username = Column(String(255))
+    last_name = Column(String(255))
+    first_name = Column(String(255))
+    password = Column(String(255))
+    institution_name = Column(String(255))
+
+
 
 
 if __name__ == "__main__":
