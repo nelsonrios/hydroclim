@@ -4,8 +4,8 @@
 <html data-wf-page="5ca661b61ef2f2a22bcc4c6e" data-wf-site="5ca661b61ef2f2aeb5cc4c6b">
 <head>
   <meta charset="utf-8">
-  <title>Store - Webflow Ecommerce website template</title>
-  <meta content="Store - Webflow HTML website template" property="og:title">
+  <title>Hydroclim - Webflow Ecommerce website template</title>
+  <meta content="Hydroclim - Webflow HTML website template" property="og:title">
   <meta content="https://uploads-ssl.webflow.com/5c6eefaaeddf9248ac13bc72/5c74fd636fa90e483526d61e_Store%20SEO.jpg" property="og:image">
   <meta content="width=device-width, initial-scale=1" name="viewport">
   <meta content="Webflow" name="generator">
@@ -23,7 +23,7 @@
   <div data-collapse="medium" data-animation="default" data-duration="400" class="navigation w-nav">
     <div class="navigation-items"><a href="index.html" class="logo-link w-nav-brand w--current"><img src="images/white_logo.svg" width="148" data-w-id="4990a16e-0ffe-6b5d-24e6-cb04cd55b9f2" alt="" class="logo-image"></a>
       <div class="navigation-wrap">
-        <nav role="navigation" class="navigation-items w-nav-menu"><a href="index.html" data-w-id="7a0fcfca-4366-6300-f19e-a21a3ae03d33" class="navigation-item w-nav-link w--current">HOME</a><a href="data.html" data-w-id="4990a16e-0ffe-6b5d-24e6-cb04cd55b9f5" class="navigation-item w-nav-link">Data</a><a href="about.html" data-w-id="4990a16e-0ffe-6b5d-24e6-cb04cd55b9f7" class="navigation-item w-nav-link">About</a><a href="team.html" data-w-id="4990a16e-0ffe-6b5d-24e6-cb04cd55b9f9" class="navigation-item w-nav-link">TEAM</a></nav>
+        <nav id="top_nav" role="navigation" class="navigation-items w-nav-menu"><a href="index.html" data-w-id="7a0fcfca-4366-6300-f19e-a21a3ae03d33" class="navigation-item w-nav-link w--current">HOME</a><a href="data.html" data-w-id="4990a16e-0ffe-6b5d-24e6-cb04cd55b9f5" class="navigation-item w-nav-link">Data</a><a href="about.html" data-w-id="4990a16e-0ffe-6b5d-24e6-cb04cd55b9f7" class="navigation-item w-nav-link">About</a><a href="team.html" data-w-id="4990a16e-0ffe-6b5d-24e6-cb04cd55b9f9" class="navigation-item w-nav-link">TEAM</a><a href="data_login.html" id="login_nav" data-w-id="4990a16e-0ffe-6b5d-24e6-cb04cd55b9f9" class="navigation-item w-nav-link">Log In</a></nav>
         <div class="menu-button w-nav-button"><img src="images/menu-icon_1menu-icon.png" width="22" alt="" class="menu-icon"></div>
       </div>
     </div>
@@ -41,20 +41,31 @@
     </div>
   </div>
   <div class="container">
-    <div class="section-2"><img src="images/nsf1v.jpg" alt="" class="image-2">
-      <div class="text-block">Acknowledge NSF here</div>
+    <div class="section-2">
+      <div class="text-block"><img src="images/nsf1v.jpg" alt="" class="image-2">HydroClim is a collaborative research grant funded by the National Science Foundation’s Advancing Biological Informatics program [DBI 1564896 awarded to Jason Knouft, St Louis University; DBI 1564806 awarded to Darren Ficklin, University of Indiana; DBI 1564727 awarded to Henry Bart, Tulane University (2016-2020)]. </div>
     </div>
   </div>
   <div class="section-5-copy">
     <div class="w-layout-grid footer">
       <a href="https://webflow.com/" target="_blank" class="made-with-webflow w-inline-block">
-        <p class="paragraph">@2017         hydroclim_contactus@tulane.edu</p>
+        <p class="paragraph">@2017         </p>
         <div class="div-block"><img src="images/ezgif.com-webp-to-png-2.png" alt=""><img src="images/ezgif.com-webp-to-png-1.png" width="20" alt=""><img src="images/ezgif.com-webp-to-png.png" alt=""></div>
       </a>
     </div>
   </div>
   <script src="https://d1tdp7z6w94jbb.cloudfront.net/js/jquery-3.3.1.min.js" type="text/javascript" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-  <script src="js/webflow.js" type="text/javascript"></script>
+<script type="text/javascript">
+ 	if(sessionStorage['Token']){
+	//console.log("sessionStorage['Token']")		
+	$("#login_nav").text("Hello! " + sessionStorage['username'])
+	$("#top_nav").append("<a href='index.html' onclick='logoff();' data-w-id='7a0fcfca-4366-6300-f19e-a21a3ae03d33' class='navigation-item w-nav-link w--current'>LOG OFF</a>")
+	function logoff(){
+		sessionStorage.clear();}
+	}
+</script>
+  
+<script src="js/webflow.js" type="text/javascript"></script>
+  
   <!-- [if lte IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script><![endif] -->
 </body>
 </html>

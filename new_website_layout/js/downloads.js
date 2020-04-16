@@ -1,5 +1,11 @@
 ﻿//import {Spinner} from 'spin.js';
 
+//var api_url = "http://hydroclimtest.centralus.cloudapp.azure.com"
+var api_url = "http://129.81.224.186"
+
+/**
+*	Form template and element actions
+*/
 $(function () {
     $.each(modelsList45, function (i, item) {
         $('#45-data').append(
@@ -18,6 +24,169 @@ $(function () {
             $('<option value="' + item.id + '">' + item.name + '</option>'));
     });
 });
+$("input#hydroclim-stast").change(function(){
+	if( $("input#hydroclim-stast").is(':checked') ) {
+		$("input[name=hydroclim-stas]").prop("disabled", false);
+	}
+	else
+		$("input[name=hydroclim-stas]").prop("disabled", true);
+});
+
+
+$(function () {
+      $('#collapseOne').on('show.bs.collapse', function () {
+          $('#hydroclim-result1').hide();
+      })
+   });
+$(function () {
+      $('#collapseOne').on('hidden.bs.collapse', function () {
+          $('#date-result').empty();
+		  $('#basin-result').empty();
+           $('#date-result').append($('<h3>your selection:</h3>'));
+
+           if( $("input#timesub").is(':checked') ){
+               var monthstart = $("#monthstart option:selected").text();
+               var monthend = $("#monthend option:selected").text();
+               var yearstart = $("#yearstart option:selected").text();
+               var yearend = $("#yearend option:selected").text();
+               $('#date-result').append($('<h6>time subset:'+ monthstart + yearstart + '-'+ monthend + yearend +'</h6>'));
+			    dateValidation()
+             }
+
+            if( $("input#timefull").is(':checked') ) {
+                var monthstart = $("#monthstart option:selected").text();
+               var monthend = $("#monthend option:selected").text();
+               var yearstart = $("#yearstart option:selected").text();
+               var yearend = $("#yearend option:selected").text();
+				dateValidation()
+                $('#basin-result').append($('<h6>time full:' +  monthstart + yearstart + '-'+ monthend + yearend + '</h6>'));
+            }
+           var basinselected = $("#basin-data option:selected").text();
+		    basinValidation()
+           $('#basin-result').append($('<h6>'+ basinselected +'</h6>'));
+		  
+
+         $('#hydroclim-result1').show();
+      })
+   });
+
+
+$(function () {
+      $('#collapseTwo').on('show.bs.collapse', function () {
+          $('#hydroclim-result2').css("display","none");
+      })
+   });
+$(function () {
+      $('#collapseTwo').on('hidden.bs.collapse', function () {
+          $('#model-result').empty();
+		   $('#rcp-result').empty();
+           $('#model-result').append($('<h3>your selection:</h3>'));
+           if( $("input#obs-r").is(':checked') ){
+                 $('#model-result').append($('<h6>Observed data</h6>'));
+             }
+
+             if( $("input#45-r").is(':checked') ){
+                  var model45selected = $("#45-data option:selected").text();
+                 $('#rcp-result').append($('<h6>RCP 4.5:' + model45selected +'</h6>'));
+             }
+              if( $("input#85-r").is(':checked') ){
+                  var model85selected = $("#85-data option:selected").text();
+                 $('#rcp-result').append($('<h6>RCP 8.5:'+ model85selected +'</h6>'));
+             }
+			modelValidation();
+			rcpValidation();
+
+         $('#hydroclim-result2').show();
+      })
+   });
+
+$(function () {
+      $('#collapseThree').on('show.bs.collapse', function () {
+          $('#hydroclim-result3').css("display","none");
+      })
+   });
+$(function () {
+      $('#collapseThree').on('hidden.bs.collapse', function () {
+          $('#hydroclim-result3').empty();
+           $('#hydroclim-result3').append($('<h3>your selection:</h3>'));
+           if( $("input#hydroclim-stast-orig").is(':checked') ){
+                 $('#hydroclim-result3').append($('<h6>Raw data</h6>'));
+             }
+
+             if( $("input#hydroclim-stast").is(':checked') ) {
+                 $('#hydroclim-result3').append('Statistics:');
+                 var selectedStats = $("input[name=hydroclim-stas]:checked");
+                 for(var checkeditem =0; checkeditem < selectedStats.length; checkeditem++){
+                     var text = $(selectedStats[checkeditem]).val();
+                      $('#hydroclim-result3').append(text + ' ');
+                 }
+
+             }
+
+
+         $('#hydroclim-result3').css("display","block");
+      })
+   });
+
+
+
+$('input#45-r').on('click',function () {
+     if( $(this).is(':checked') )
+     { $('#45-data').prop('disabled', false);
+        $('#45-data').selectpicker('refresh');}
+     else
+     {
+         $('#45-data').prop('disabled', true);
+        $('#45-data').selectpicker('refresh');
+     }
+
+});
+$('input#85-r').on('click',function () {
+     if( $(this).is(':checked') )
+     { $('#85-data').prop('disabled', false);
+        $('#85-data').selectpicker('refresh');}
+     else
+     {
+         $('#85-data').prop('disabled', true);
+        $('#85-data').selectpicker('refresh');
+     }
+
+});
+
+$('#basin-data').change(function () {
+        var selectedItem = $('#basin-data').val();
+    });
+
+createYearDropdowns();
+createMonthDropdowns();
+function createYearDropdowns() {
+    var totalYears = 150;
+    var startYear = 1950;
+    var count = 1;
+
+    while (count <= totalYears) {
+        var newOption = $('<option value="' + startYear + '">' + startYear + '</option>');
+        $('#yearstart').append(newOption.clone());
+        $('#yearend').append(newOption.clone());
+        $('#fullyearstart').append(newOption.clone());
+        $('#fullyearend').append(newOption.clone());
+        count++;
+        startYear++;
+    }
+}
+
+function createMonthDropdowns() {
+    var index, len;
+    for (index = 0, len = months.length; index < len; ++index) {
+        var month = months[index];
+        var newOption = $('<option value="' + month.value + '">' + month.name + '</option>');
+        $('#monthstart').append(newOption.clone());
+        $('#monthend').append(newOption.clone());
+        $('#fullmonthstart').append(newOption.clone());
+        $('#fullmonthend').append(newOption.clone());
+    }
+}
+
 function showSpinner() {
     var opts = {
       lines: 15, // The number of lines to draw
@@ -40,12 +209,11 @@ function showSpinner() {
 		
     });
 }
-//download data
-$('#basin-data').change(function () {
-        var selectedItem = $('#basin-data').val();
-        //alert(selectedItem);
-    });
-var validateValue =true
+
+
+/**
+*	Download Data
+*/
 $("#submitform").submit(function(e) {
 
     e.preventDefault(); // avoid to execute the actual submit of the form.
@@ -64,8 +232,6 @@ $("#submitform").submit(function(e) {
 	}
 	else{	 
     var form = $(this);
-	var api_url = 'http://127.0.0.1:5000';
-    //var url = form.attr('action');
 	var string = form.serialize()
 	//validate flag
 
@@ -78,7 +244,7 @@ $("#submitform").submit(function(e) {
 		timerangetype = "&timerangetype=2" 
 
 	var basin_id = "&basinids=" + String($('#basin-data').val());
-	basin_id = basin_id.replace(",", "_");
+	basin_id = basin_id.split(",").join("_");
 	
 	//B.Model
 	var obs_r = ''
@@ -204,37 +370,14 @@ alert("Download will start in a few minutes!")
 
 });
 
-createYearDropdowns();
-createMonthDropdowns();
-function createYearDropdowns() {
-    var totalYears = 150;
-    var startYear = 1950;
-    var count = 1;
 
-    while (count <= totalYears) {
-        var newOption = $('<option value="' + startYear + '">' + startYear + '</option>');
-        $('#yearstart').append(newOption.clone());
-        $('#yearend').append(newOption.clone());
-        $('#fullyearstart').append(newOption.clone());
-        $('#fullyearend').append(newOption.clone());
-        count++;
-        startYear++;
-    }
-}
-
-function createMonthDropdowns() {
-    var index, len;
-    for (index = 0, len = months.length; index < len; ++index) {
-        var month = months[index];
-        var newOption = $('<option value="' + month.value + '">' + month.name + '</option>');
-        $('#monthstart').append(newOption.clone());
-        $('#monthend').append(newOption.clone());
-        $('#fullmonthstart').append(newOption.clone());
-        $('#fullmonthend').append(newOption.clone());
-    }
-}
-
-//validate after select date
+/**
+*	Validation
+*/
+/**
+*	improvement required: validation funcs onvergence 
+*/
+var validateValue =true
 $("select.selectpicker.date-selection").change(function(){
 	dateValidation();
 })
@@ -374,131 +517,3 @@ function statsValidation(){
 }
 
 
-$("input#hydroclim-stast").change(function(){
-	if( $("input#hydroclim-stast").is(':checked') ) {
-		$("input[name=hydroclim-stas]").prop("disabled", false);
-	}
-	else
-		$("input[name=hydroclim-stas]").prop("disabled", true);
-});
-
-
-$(function () {
-      $('#collapseOne').on('show.bs.collapse', function () {
-          $('#hydroclim-result1').hide();
-      })
-   });
-$(function () {
-      $('#collapseOne').on('hidden.bs.collapse', function () {
-          $('#date-result').empty();
-		  $('#basin-result').empty();
-           $('#date-result').append($('<h3>your selection:</h3>'));
-
-           if( $("input#timesub").is(':checked') ){
-               var monthstart = $("#monthstart option:selected").text();
-               var monthend = $("#monthend option:selected").text();
-               var yearstart = $("#yearstart option:selected").text();
-               var yearend = $("#yearend option:selected").text();
-               $('#date-result').append($('<h6>time subset:'+ monthstart + yearstart + '-'+ monthend + yearend +'</h6>'));
-			    dateValidation()
-             }
-
-            if( $("input#timefull").is(':checked') ) {
-                var monthstart = $("#monthstart option:selected").text();
-               var monthend = $("#monthend option:selected").text();
-               var yearstart = $("#yearstart option:selected").text();
-               var yearend = $("#yearend option:selected").text();
-				dateValidation()
-                $('#basin-result').append($('<h6>time full:' +  monthstart + yearstart + '-'+ monthend + yearend + '</h6>'));
-            }
-           var basinselected = $("#basin-data option:selected").text();
-		    basinValidation()
-           $('#basin-result').append($('<h6>'+ basinselected +'</h6>'));
-		  
-
-         $('#hydroclim-result1').show();
-      })
-   });
-
-
-$(function () {
-      $('#collapseTwo').on('show.bs.collapse', function () {
-          $('#hydroclim-result2').css("display","none");
-      })
-   });
-$(function () {
-      $('#collapseTwo').on('hidden.bs.collapse', function () {
-          $('#model-result').empty();
-		   $('#rcp-result').empty();
-           $('#model-result').append($('<h3>your selection:</h3>'));
-           if( $("input#obs-r").is(':checked') ){
-                 $('#model-result').append($('<h6>Observed data</h6>'));
-             }
-
-             if( $("input#45-r").is(':checked') ){
-                  var model45selected = $("#45-data option:selected").text();
-                 $('#rcp-result').append($('<h6>RCP 4.5:' + model45selected +'</h6>'));
-             }
-              if( $("input#85-r").is(':checked') ){
-                  var model85selected = $("#85-data option:selected").text();
-                 $('#rcp-result').append($('<h6>RCP 8.5:'+ model85selected +'</h6>'));
-             }
-			modelValidation();
-			rcpValidation();
-
-         $('#hydroclim-result2').show();
-      })
-   });
-
-$(function () {
-      $('#collapseThree').on('show.bs.collapse', function () {
-          $('#hydroclim-result3').css("display","none");
-      })
-   });
-$(function () {
-      $('#collapseThree').on('hidden.bs.collapse', function () {
-          $('#hydroclim-result3').empty();
-           $('#hydroclim-result3').append($('<h3>your selection:</h3>'));
-           if( $("input#hydroclim-stast-orig").is(':checked') ){
-                 $('#hydroclim-result3').append($('<h6>Raw data</h6>'));
-             }
-
-             if( $("input#hydroclim-stast").is(':checked') ) {
-                 $('#hydroclim-result3').append('Statistics:');
-                 var selectedStats = $("input[name=hydroclim-stas]:checked");
-                 for(var checkeditem =0; checkeditem < selectedStats.length; checkeditem++){
-                     var text = $(selectedStats[checkeditem]).val();
-                      $('#hydroclim-result3').append(text + ' ');
-                 }
-
-             }
-
-
-         $('#hydroclim-result3').css("display","block");
-      })
-   });
-
-
-
-$('input#45-r').on('click',function () {
-     if( $(this).is(':checked') )
-     { $('#45-data').prop('disabled', false);
-        $('#45-data').selectpicker('refresh');}
-     else
-     {
-         $('#45-data').prop('disabled', true);
-        $('#45-data').selectpicker('refresh');
-     }
-
-});
-$('input#85-r').on('click',function () {
-     if( $(this).is(':checked') )
-     { $('#85-data').prop('disabled', false);
-        $('#85-data').selectpicker('refresh');}
-     else
-     {
-         $('#85-data').prop('disabled', true);
-        $('#85-data').selectpicker('refresh');
-     }
-
-});

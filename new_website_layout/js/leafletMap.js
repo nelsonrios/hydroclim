@@ -23,9 +23,9 @@ function initMap() {
     //var hydroclimFullLayer = "aggregateReach";
     var hydroclimFullLayer = "reach";
 	
-	var api_url = "http://127.0.0.1:5000"
+	//var api_url = "http://127.0.0.1:5000"
 	//var api_url = "http://hydroclimtest.centralus.cloudapp.azure.com"
-	
+	var api_url = "http://129.81.224.186"
 	var hydroclimModels = modelsList45;
     
 	var hydroclimSubsetLayer = "aggregateReachSubset";
@@ -84,29 +84,8 @@ function initMap() {
         }
     );
 	
-	/*var basin = new L.GeoJSON.AJAX("http://127.0.0.1:5000/v1/basin/basin",{
-					style:function(feature){
-						return {color: "brown"}
-					},
-					onEachFeature: function (feature, layer) {
-						var html_prop ="";
-						for(var prop in feature.properties){
-								html_prop = html_prop + '<tr><td>'+prop+'</td><td>'+feature.properties[prop]+'</td></tr>'
-							}
-						layer.bindPopup('<table>' + html_prop + '</table>');
-						}
-					});*/
-    basin.imageSrc = "Basin.PNG";
 	
-	/*var reaches = new L.GeoJSON.AJAX("http://127.0.0.1:5000/v1/reach/reach",{
-					onEachFeature: function (feature, layer) {
-						var html_prop ="";
-						for(var prop in feature.properties){
-								html_prop = html_prop + '<tr><td>'+prop+'</td><td>'+feature.properties[prop]+'</td></tr>'
-							}
-						layer.bindPopup('<table>' + html_prop + '</table>');
-						}
-					});*/
+    basin.imageSrc = "Basin.PNG";
     reaches.imageSrc = "Reach.PNG";
 
     /////Google Satellite layer
@@ -144,20 +123,20 @@ function initMap() {
     }).addTo(map);
     nhd.imageSrc = "NHD.PNG";
 
-    //addAggregateHydroclimLayer(hydroclimMonthStart, hydroclimMonthEnd, hydroclimYearStart, hydroclimYearEnd, selectedStyle,modeltype);
-
-	
-	hydroclim = new L.GeoJSON.AJAX( api_url + "/v1/records/getallreachdata?monthstart=1&monthend=1&yearstart=1950&yearend=1950&timerangetype=1&basin_id=1&model_id=0",{
+	/**
+	*	↓↓↓HYDRCOCLIM LAYER PART UPDATE REQUIRED, MOVE GEOJSON LAYER TO GEOSERVER AND TILECACHE↓↓↓
+	*/
+	hydroclim = new L.GeoJSON.AJAX( api_url + "/v1/records/getallreachdata?monthstart=1&monthend=1&yearstart=1950&yearend=1950&timerangetype=1&model_id=0",{
 					style: function(feature) {
 						d = feature.properties.temp;
 							return d > 20 ? {color: 'red', opacity:0.7} :
 								d > 15  ? {color: 'orange', opacity:0.7} :
 								d > 10  ? {color: 'yellow', opacity:0.7} :
 								d > 5  ? {color: 'green', opacity:0.7} :
-											{color: 'blue', opacity:0.7};
+								!d ? {color: 'grey', opacity:0.7}:
+								{color: 'blue', opacity:0.7};
 
 								},
-	//return getColorTemp(d)
 	
 					onEachFeature: function (feature, layer) {
 						var html_prop ="";
@@ -205,14 +184,16 @@ function initMap() {
            d > 15   ? {color:'orange'} :
            d > 10   ? {color:'yellow'} :
            d > 5   ? {color:'green'} :
-                      {color:'blue'} ;
+           !d ? {color: 'grey'}:
+		{color: 'blue', opacity:0.7};
 	}
 	function getColorTempLegend(d) {
 		return d > 20  ? 'red' :
            d > 15   ? 'orange' :
            d > 10   ? 'yellow' :
            d > 5   ? 'green' :
-                      'blue';
+	       !d ? 'grey':
+		'blue';
 	}
 	function getColorLegend(d) {
 		return d > 20   ? '#7f2704':
@@ -223,7 +204,7 @@ function initMap() {
            d > 0.2   ? '#fdae6b':
            d > 0.1   ? '#fdd0a2':
            d > 0   ?'#fee6ce':
-				'#fff5eb';
+	!d ? 'grey':'#fff5eb';
 	}
 	function getColorFlow(d) {
 		return d > 20   ? {color:'#7f2704'}:
@@ -234,6 +215,7 @@ function initMap() {
            d > 0.2   ? {color:'#fdae6b'}:
            d > 0.1   ? {color:'#fdd0a2'}:
            d > 0   ?{color:'#fee6ce'} :
+	      !d ?{color:'grey'} :
 				{color:'#fff5eb'};
 	}
 
@@ -243,14 +225,14 @@ function initMap() {
         grades = [0, 5, 10, 15, 20],
 		grades2 = [0,0.1,0.2,0.5,1,5,10,20],
         labels = [];
-		div.innerHTML = "<p>temperature legend/℃</p>"
+		div.innerHTML = "<p>temperature legend/℃</p> <i style='background: grey'></i> no data <br>"
     // loop through our density intervals and generate a label with a colored square for each interval
     for (var i = 0; i < grades.length; i++) {
         div.innerHTML +=
             '<i style="background:' + getColorTempLegend(grades[i] + 1) + '"></i> ' +
             grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
 		}
-		div.innerHTML += "<p>discharge legend/ft³/s</p>"
+		div.innerHTML += "<p>discharge legend/ft³/s</p> <i style='background: grey'></i> no data <br>"
 		for (var i = 0; i < grades2.length; i++) {
         div.innerHTML +=
             '<i style="background:' + getColorLegend(grades2[i] + 1) + '"></i> ' +
@@ -265,9 +247,9 @@ function initMap() {
 		map.removeControl(legend);
 		legend.onAdd = function (map) {
 		var div = L.DomUtil.create('div', 'info legend'),
-        grades = (variableValue == 'Temp')?[0, 5, 10, 15, 20]:[0,0.1,0.2,0.5,1,5,10,20],
+        grades = (variableValue == 'Temp')?[0, 5, 10, 15, 20]:[0,0.1,0.2,0.5,1,5,10,20], //improvement required:move temp and discharge interval to global variables.
         labels = [];
-		div.innerHTML = (variableValue == 'Temp')?"<p>temperature legend/℃</p>":"<p>discharge legend/ft³/s</p>"
+		div.innerHTML = (variableValue == 'Temp')?"<p>temperature legend/℃</p><i style='background: grey'></i> no data <br>":"<p>discharge legend/ft³/s</p><i style='background: grey'></i> no data <br>"
     // loop through our density intervals and generate a label with a colored square for each interval
 	if(variableValue == 'Temp'){
 		for (var i = 0; i < grades.length; i++) {
@@ -320,57 +302,57 @@ function initMap() {
     L.control.mousePosition().addTo(map);
 	
 	
-	////Test Geojson from API
-	map.on('click', function(e) {
-		console.time('API')
-		//alert('lat：' + e.latlng.lat + '\n long：' + e.latlng.lng);
-		//getReachShape(e.latlng.lat, e.latlng.lng)
-	});
-	function getReachShape(lat,lng){
-		 $.ajax({
-        //url: "http://127.0.0.1:5000/v1/basin/basin", 
-        //url: "http://127.0.0.1:5000/v1/reach/reach",
-		url: "http://127.0.0.1:5000/v1/reach/reach?X=" + lat + "&Y="+ lng,
-		//url: "http://127.0.0.1:5000/v1/records/getreachdata",
-		type: "GET",             
-        data: {},
-        dataType: 'json',
-        cache: false,
-		beforeSend:function(XMLHttpRequest){
-			$("#loading").html("<img src='https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif'/>");
-		},
-        success: function(data)
-			{
-				if (JSON.stringify(data) == '{}'){
-					alert('There are no Reaches here');
-				}
-				else{
-				var geojsonLayer = new L.GeoJSON(data,{
-					onEachFeature: function (feature, layer) {
-						var html_prop ="";
-						for(var prop in feature.properties){
-								html_prop = html_prop + '<tr><td>'+prop+'</td><td>'+feature.properties[prop]+'</td></tr>'
-							}
-						layer.bindPopup('<table>' + html_prop + '</table>');
-						}
-					});
-				geojsonLayer.addTo(map);
-				}
-				$("#loading").empty();
-				console.timeEnd('API')
-			},
-			error: function (request, status, error) {
-				$("#loading").empty();
-				console.log(error);
-			}
-		});
-	}
+	// ////Test Geojson from API
+	// map.on('click', function(e) {
+		// console.time('API')
+		// //alert('lat：' + e.latlng.lat + '\n long：' + e.latlng.lng);
+		// //getReachShape(e.latlng.lat, e.latlng.lng)
+	// });
+	// function getReachShape(lat,lng){
+		 // $.ajax({
+        // //url: "http://127.0.0.1:5000/v1/basin/basin", 
+        // //url: "http://127.0.0.1:5000/v1/reach/reach",
+		// url: "http://127.0.0.1:5000/v1/reach/reach?X=" + lat + "&Y="+ lng,
+		// //url: "http://127.0.0.1:5000/v1/records/getreachdata",
+		// type: "GET",             
+        // data: {},
+        // dataType: 'json',
+        // cache: false,
+		// beforeSend:function(XMLHttpRequest){
+			// $("#loading").html("<img src='https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif'/>");
+		// },
+        // success: function(data)
+			// {
+				// if (JSON.stringify(data) == '{}'){
+					// alert('There are no Reaches here');
+				// }
+				// else{
+				// var geojsonLayer = new L.GeoJSON(data,{
+					// onEachFeature: function (feature, layer) {
+						// var html_prop ="";
+						// for(var prop in feature.properties){
+								// html_prop = html_prop + '<tr><td>'+prop+'</td><td>'+feature.properties[prop]+'</td></tr>'
+							// }
+						// layer.bindPopup('<table>' + html_prop + '</table>');
+						// }
+					// });
+				// geojsonLayer.addTo(map);
+				// }
+				// $("#loading").empty();
+				// console.timeEnd('API')
+			// },
+			// error: function (request, status, error) {
+				// $("#loading").empty();
+				// console.log(error);
+			// }
+		// });
+	// }
 	
 
 
-    //////////////////////////
-    /////On change functions for Month, Year, Style selectors
-    //////////////////////////
+    /**
+	*	On change functions for Month, Year, Style selectors
+	*/
 	function dateValidation(){
 		var monthstart = hydroclimMonthStart
 		var monthend =  hydroclimMonthEnd
@@ -463,8 +445,6 @@ function initMap() {
         defaultsChanged = true;
 
     });
-	
-	
 	
 	$("#flow").change(function () {
         //map.removeLayer(hydroclim);
@@ -563,9 +543,9 @@ function initMap() {
             toggleClosed.show();
         }
     });
-    /////////////
-    ////Data Options
-    /////////////
+    /**
+    *	Data Options
+    */
     $('<div id="toggle-data-options" class="control-panel-toggle"><span id="toggle-data-options-on" title="Toggle data options" class="glyphicon glyphicon-chevron-right"></span><span id="toggle-data-options-off" title="Toggle data options" class="glyphicon glyphicon-chevron-down"></span></span><span class="title-toggle">&nbsp;Data Options</div>').insertBefore('.leaflet-control-data-options');
     $('.leaflet-control-data-options').hide();
     $("#toggle-data-options-off").hide();
@@ -611,33 +591,16 @@ function initMap() {
             }
         ).addTo(map);
     }
-
+	/**
+	*	↓↓↓HYDRCOCLIM LAYER PART UPDATE REQUIRED, MOVE GEOJSON LAYER TO GEOSERVER AND TILECACHE↓↓↓
+	*/
     function updateAggregateHydroclimLayer(monStart, monEnd, yearStart, yearEnd,style,modeltype) {
-		if(dateValidation()) return false;
+		if(!dateValidation()) return false;
 		else{
 			var viewparams = [
             'timerangetype=' + timerangetype, 'monthstart=' + monStart, 'monthend=' + monEnd, 'yearstart=' + yearStart, 'yearend=' + yearEnd, 'basin_id=1' , 'model_id='+modeltype
         ]
-
-        //hydroclim.wmsParams.styles = style;
-        //hydroclim.wmsParams.layers = "hydroclim:" + hydroclimLayer;
-
-        /*var full_url = ""
-        if (defaultsChanged) {
-            full_url = encodeURI(wms_local + "viewparams=" + viewparams.join(';'));
-        } else {
-            full_url = encodeURI(wms_local);
-        }
-
-        hydroclim._url = full_url;
-
-        hydroclim.redraw();*/
-		 //if (defaultsChanged) {
             full_url = encodeURI(api_url + "/v1/records/getallreachdata?" + viewparams.join('&'));
-        //} else {
-           // full_url = encodeURI("http://127.0.0.1:5000/v1/records/getallreachdata");
-        //}
-		//map.removeLayer(hydroclim);
 		map.removeLayer(hydroclim);
 		hydroclim = new L.GeoJSON.AJAX(full_url,{
 					style: function(feature) {
@@ -647,7 +610,9 @@ function initMap() {
 								d > 15  ? {color: 'orange', opacity:0.7} :
 								d > 10  ? {color: 'yellow', opacity:0.7} :
 								d > 5  ? {color: 'green', opacity:0.7} :
-											{color: 'blue', opacity:0.7};
+								!d ? {color: 'grey', opacity:0.7}:
+								{color: 'blue', opacity:0.7};
+
 
 							}
 						else{
@@ -660,6 +625,7 @@ function initMap() {
 								d > 0.2   ? {color:'#fdae6b'}:
 								d > 0.1   ? {color:'#fdd0a2'}:
 								d > 0   ?{color:'#fee6ce'} :
+								!d ?{color:'grey'} :
 									{color:'#fff5eb'};
 							}
 						},
@@ -693,17 +659,16 @@ function initMap() {
 		
     }
 
-    // @function splitWords(str: String): String[]
-    // Trims and splits the string on whitespace and returns the array of parts.
+    //Trims and splits the string on whitespace and returns the array of parts.
     function splitWords(str) {
         return trim(str).split(/\s+/);
     }
 	
 
 	
-    ///////////////////////////////////////////////////
-    /////////Add data to Month, Year, Style selectors
-    ///////////////////////////////////////////////////
+    /**
+    *Add data to Month, Year, Style selectors
+    */
     createYearDropdowns();
     createMonthDropdowns();
     createStylesDropdowns();
@@ -839,131 +804,3 @@ function initMap() {
     })
 }
 
-
-	////// Test GeoServer 
-	////// Test GeoServer 
-/*map.on('click', function(e) {
-		console.time('GeoServer')
-		//alert('lat：' + e.latlng.lat + '\n long：' + e.latlng.lng);
-		var basin_id;
-		loadWFS("cite:basin","EPSG:4326",'CONTAINS(geom, POINT (' + e.latlng.lng +' ' + e.latlng.lat +'))', function loadWfsHandler(data) {
-                console.log(data);
-				if(data.features.length > 0)
-				{
-					basin_id = data.features[0].properties.basin_info_id;
-					loadWFS("cite:reach","EPSG:4326",'basin_id = ' + basin_id, function loadWfsReach(data){
-						layer = L.geoJson(data,{
-					onEachFeature: function (feature, layer) {
-						var html_prop ="";
-						for(var prop in feature.properties){
-								html_prop = html_prop + '<tr><td>'+prop+'</td><td>'+feature.properties[prop]+'</td></tr>'
-							}
-						layer.bindPopup('<table>' + html_prop + '</table>');
-						}
-					})
-						layer.addTo(map)
-						console.timeEnd('GeoServer')
-					})
-					
-				}
-				else
-					alert('There are no Reaches here');
-
-            })
-		
-	});
-	var layer;
-	//loadWFS("cite:reach", "EPSG:4326")
-	function loadWFS(layerName, epsg, CQL_string,func) {
-            var urlString = "http://localhost:8080/geoserver/cite/ows";
-            var param = {
-                service: 'WFS',
-                version: '1.0.0',
-                request: 'GetFeature',
-                typeName: layerName,
-				//outputFormat:'json',
-				//format_options:'callback:loadWfsHandler',
-                outputFormat: 'application/json',
-                maxFeatures:3200,
-                srsName: epsg,
-				CQL_FILTER:CQL_string
-            };
-            var u = urlString + L.Util.getParamString(param, urlString);
-            
-            console.log(u);          
-            $.ajax({
-				//jsonp: false,
-				//jsonpCallback: 'getJson',
-                url:u,
-				type:'GET',
-                dataType: 'json',
-                success: func, 
-
-               });
-           
-        }*/
-		
-		
-	
-		
-	
- 
-    //////////Allow drawable polygons on map
-    //// Initialise the FeatureGroup to store editable layers
-    //var editableLayers = new L.FeatureGroup();
-    //map.addLayer(editableLayers);
-
-    //var drawPluginOptions = {
-    //    position: 'topright',
-    //    draw: {
-    //        polygon: {
-    //            allowIntersection: false, // Restricts shapes to simple polygons
-    //            drawError: {
-    //                color: '#e1e100', // Color the shape will turn when intersects
-    //                message: '<strong>Oh snap!<strong> you can\'t draw that!' // Message that will show when intersect
-    //            },
-    //            shapeOptions: {
-    //                color: '#97009c'
-    //            }
-    //        },
-    //        // disable toolbar item by setting it to false
-    //        polyline: false,
-    //        circle: false, // Turns off this drawing tool
-    //        rectangle: false,
-    //        marker: false,
-    //    },
-    //    edit: {
-    //        featureGroup: editableLayers, //REQUIRED!!
-    //        remove: false
-    //    }
-    //};
-    //// Initialise the draw control and pass it the FeatureGroup of editable layers
-    //var drawControl = new L.Control.Draw(drawPluginOptions);
-    //map.addControl(drawControl);
-
-    //var editableLayers = new L.FeatureGroup();
-    //map.addLayer(editableLayers);
-
-    //map.on('draw:created', function (e) {
-    //    var type = e.layerType,
-    //        layer = e.layer;
-
-    //    if (type === 'marker') {
-    //        layer.bindPopup('A popup!');
-    //    }
-
-    //    editableLayers.addLayer(layer);
-    //});
-    //////////
-
-    ///////////////////////////
-    /////Add Month, Year, Style selectors to control panel
-    ///////////////////////////
-    //var monthDropdown = '<div style="margin-bottom:5px;"><select id="months" name="months"></select></div>';
-    //$(".leaflet-control-data-options").append(monthDropdown);
-
-    //var yearDropdown = '<div style="margin-bottom:5px;"><select id="years" name="years"></select></div>';
-    //$(".leaflet-control-data-options").append(yearDropdown);
-
-    //var styleDropdown = '<div style="margin-bottom:5px;"><select id="style" name="style"></select></div>';
-    //$(".leaflet-control-data-options").append(styleDropdown);

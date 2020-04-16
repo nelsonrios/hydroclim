@@ -1,3 +1,6 @@
+/**
+*	Form Validation: Date
+*/
 function checkDate(yearstart, yearend, monthstart, monthend, timerangetype){
 	if(timerangetype == "2"){//full
 		var startTime= yearstart +"/" + monthstart +"/" + "01"
